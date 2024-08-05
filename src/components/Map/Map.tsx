@@ -33,7 +33,7 @@ const MapContainer: React.FC = () => {
               </div>
             </ResultBox>
           ))}
-          <div id="pagination"></div>
+          <div id="pagination" style={{backgroundColor:'black',position:'sticky',bottom:0}}></div>
         </div>
       </ResultWrapper>
     </div>
@@ -47,8 +47,9 @@ export const SideBarBox = styled.div`
   border: 1px solid red;
 `;
 export const ResultWrapper = styled.div`
-  height: 54rem;
+  height: 25rem;
   overflow: auto;
+  border: 1px solid red;
 `;
 
 export const ResultBox = styled.div`
