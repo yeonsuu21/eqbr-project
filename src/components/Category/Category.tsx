@@ -1,20 +1,32 @@
 import { useAtom } from 'jotai';
-import React from 'react';
-import { categoryStrAtom } from 'stores/map';
+import React, { useEffect } from 'react';
+import { categoryHistoryAtom, categoryStrAtom, searchAllAtom, searchStrAtom } from 'stores/map';
 import styled from 'styled-components';
 
-const categories = ['압구정', '선정릉', '강남', '철산'];
+const initialCategories = ['압구정', '선정릉', '강남', '철산'];
 
 function Category() {
   const [selectedCategory, setSelectedCategory] = useAtom(categoryStrAtom);
+  const [searchStr] = useAtom(searchStrAtom);
+  const [searchHistory, setSearchHistory] = useAtom(categoryHistoryAtom);
+  const [searchAll , setSearchAll] = useAtom(searchAllAtom)
+
+  useEffect(() => {
+    if (searchStr && !searchHistory.includes(searchStr)) {
+      setSearchHistory(prevHistory => [searchStr, ...prevHistory]);
+    }
+  }, [searchStr]);
+
+  const displayCategories = [...searchHistory, ...initialCategories];
 
   const handleCategoryClick = (category: string) => {
+    setSearchAll(category)
     setSelectedCategory(category);
   };
 
   return (
     <CategWrapper>
-      {categories.map((category, index) => (
+      {displayCategories.map((category, index) => (
         <CategBox key={index} onClick={() => handleCategoryClick(category)}>
           {category}
         </CategBox>
@@ -24,21 +36,28 @@ function Category() {
 }
 
 export const CategWrapper = styled.div`
-  border: 1px solid black;
+  padding:0.5rem;
   height: 3rem;
-  margin-top: 2rem;
-  cursor: pointer;
   display: flex;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y:hidden;
+  align-items: center;
 `;
 
 export const CategBox = styled.div`
-  border: 1px solid red;
-  width: 5rem;
-  height: 2rem;
+  width: 4rem;
+  height: 2.2rem;
+  border-radius: 25px;
+  margin-right: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover{
+  flex-shrink: 0;
+  background-color:#D9D9D9;
+  font-size: 12px;
+  &:hover {
+    cursor: pointer;
     background-color: blue;
   }
 `;

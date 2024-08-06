@@ -12,8 +12,8 @@ function SideBar() {
 }
 
 export const SideBarWrapper = styled.div`
-border: 1px solid black;
+top:0;
+z-index: 1000000;
 width: 23rem;
-margin-bottom: 1rem;
 `
 export default SideBar

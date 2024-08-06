@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import logo from '../../assets/logo.png';
+import toss from '../../assets/toss.png';
 
 function TabBar() {
   const navigate = useNavigate();   
@@ -17,7 +18,7 @@ function TabBar() {
   return (
     <TabBarWapper>
       <Logo>
-        <LogoImg src={logo} alt='logo'/>
+        <LogoImg src={toss} alt='logo'/>
       </Logo>
       <TabStr>
         <div className='map' onClick={routeMain}>
@@ -32,40 +33,44 @@ function TabBar() {
 }
 
 export const TabBarWapper = styled.div`
-  border:1px solid black;
-  height: 8rem;
+  height: 4.5rem;
   display: flex;
+  background-color: #0064FF;
+  border-bottom-left-radius: 36px;
+  border-bottom-right-radius: 36px;
 `;
 
 export const Logo = styled.div`
-  width: 14rem;
-  height: 8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+ margin-left: 2rem;
+ margin-top: 0.5rem;
 `;
 
 export const LogoImg = styled.img`
-  width: 13rem;
-  height: 6rem;
+ width: 3.5rem;
+ height: 3.5rem;
 `;
 
 export const TabStr = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 5rem;
+ margin-left: 5rem;
 
   .map{
-    font-size: 35px;
+    color: #EEEEEE;
+    font-size: 23px;
     font-weight: 600;
     margin-right: 5rem;
     cursor: pointer;
+    font-family: pretendard;
   }
   .map:active{
     color: red;
   }
   .fav{
-    font-size: 35px;
+    color: #EEEEEE;
+    font-size: 23px;
     font-weight: 600;
     cursor: pointer;
   }

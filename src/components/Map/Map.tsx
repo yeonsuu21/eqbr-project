@@ -4,6 +4,7 @@ import MapDisplay from './MapDisplay';
 import SideBar from '../SideBar/SideBar';
 import { useAtomValue } from 'jotai';
 import { searchStrAtom } from 'stores/map';
+import KakaoKeywordMap from './MapTest';
 
 const MapContainer: React.FC = () => {
   const searchPlace = useAtomValue(searchStrAtom)
@@ -11,9 +12,9 @@ const MapContainer: React.FC = () => {
 
   return (
     <div style={{ display: 'flex' }}>
+      <KakaoKeywordMap/>
     <SideBarBox>
-    <SideBar/>
-    <div style={{ display: 'flex' }}>
+    {/* <div style={{ display: 'flex' }}>
       <ResultWrapper>
         <div id="result-list">
           {places.map((item: any, i) => (
@@ -36,15 +37,15 @@ const MapContainer: React.FC = () => {
           <div id="pagination" style={{backgroundColor:'black',position:'sticky',bottom:0}}></div>
         </div>
       </ResultWrapper>
-    </div>
+    </div> */}
     </SideBarBox>
-    <MapDisplay searchPlace={searchPlace ? searchPlace :''} setPlaces={setPlaces} />
+    {/* <MapDisplay searchPlace={searchPlace ? searchPlace :''} setPlaces={setPlaces} /> */}
     </div>
   );
 };
 export const SideBarBox = styled.div`
   height: 90%;
-  border: 1px solid red;
+  border-radius: 20px;
 `;
 export const ResultWrapper = styled.div`
   height: 25rem;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface MapDisplayProps {
   searchPlace: string;
@@ -6,6 +6,8 @@ interface MapDisplayProps {
 }
 
 const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
+  const [noResults, setNoResults] = useState(false);
+
   useEffect(() => {
     const { kakao }: any = window;
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -19,6 +21,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
     const ps = new kakao.maps.services.Places();
 
     if (searchPlace === '') {
+      setNoResults(false);
       const defaultLatLng = new kakao.maps.LatLng(37.50693697914934, 127.05577247718644);
       let marker = new kakao.maps.Marker({
         map: map,
@@ -27,27 +30,39 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
       map.setCenter(defaultLatLng);
 
       kakao.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">Default Location</div>');
+        infowindow.setContent('<div style="padding:5px;font-size:12px;">eqbr홀딩스</div>');
         infowindow.open(map, marker);
       });
-
-      setPlaces([{ place_name: 'Default Location', y: 37.50693697914934, x: 127.05577247718644 }]);
+      //기본 지워놓음
+      // setPlaces([{ place_name: 'Default Location', y: 37.50693697914934, x: 127.05577247718644 }]);
     } else {
-      ps.keywordSearch(searchPlace, placesSearchCB);
+      // Perform search
+      ps.keywordSearch(searchPlace, placesSearchCB, {
+        radius: 5000,
+        location: new kakao.maps.LatLng(37.50693697914934, 127.05577247718644),
+      });
     }
 
     function placesSearchCB(data: any, status: any, pagination: any) {
       if (status === kakao.maps.services.Status.OK) {
-        let bounds = new kakao.maps.LatLngBounds();
-
-        for (let i = 0; i < data.length; i++) {
-          displayMarker(data[i]);
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        if (data.length === 0) {
+          setNoResults(true);
+          setPlaces([]);
+          map.setCenter(new kakao.maps.LatLng(37.50693697914934, 127.05577247718644)); // Optional: Center the map to default location if no results
+        } else {
+          setNoResults(false);
+          let bounds = new kakao.maps.LatLngBounds();
+          for (let i = 0; i < data.length; i++) {
+            displayMarker(data[i]);
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+          map.setBounds(bounds);
+          displayPagination(pagination);
+          setPlaces(data);
         }
-
-        map.setBounds(bounds);
-        displayPagination(pagination);
-        setPlaces(data);
+      } else {
+        setNoResults(true);
+        setPlaces([]);
       }
     }
 
@@ -93,7 +108,15 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
     }
   }, [searchPlace, setPlaces]);
 
-  return <div id="myMap" style={{ width: '88rem', height: '65rem' }}></div>;
+  return (
+    <div>
+      {noResults ? (
+        <div style={{ textAlign: 'center', padding: '20px' }}>지도가 로딩 되지 않습니다</div>
+      ) : (
+        <div id="myMap" style={{ width: '88rem', height: '65rem' }}></div>
+      )}
+    </div>
+  );
 };
 
 export default MapDisplay;
