@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { setmodalAtom } from 'stores/modal';
 import ModalBox from 'components/Modal/ModalBox';
 import { favPlaceAtom } from 'stores/search';
+import MapException from 'components/Exception/MapException';
+import SearchException from 'components/Exception/SearchException';
 function KakaoKeywordMap() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
@@ -15,6 +17,8 @@ function KakaoKeywordMap() {
   const [message, setMessage] = useState(false);
   const [modalOpen, setModalOpen] = useAtom(setmodalAtom);
   const [favPlace, setFavPlace] = useAtom(favPlaceAtom);
+  //검색결과
+  const [flag, setFlag] = useState(false);
   //검색 or 키워드 나중에 된 것 적용
   const keyword = useAtomValue(searchAllAtom)
   const [selectedPlace, setSelectedPlace] = useAtom(selectItemAtom);
@@ -61,8 +65,7 @@ function KakaoKeywordMap() {
     
         map.setBounds(bounds);
       }else if (status === kakao.maps.services.Status.ZERO_RESULT) {
- 
-        alert('검색 결과가 존재하지 않습니다.');
+        setFlag(true)
         return;
  
     } else if (status === kakao.maps.services.Status.ERROR) {
@@ -71,15 +74,13 @@ function KakaoKeywordMap() {
         return;
  
     }
-    //   if (keyword ==null){
-    //     setMessage(true);
-    //   }
     },{
         //검색 범위 예외처리
         radius: 500,
         location: new kakao.maps.LatLng(37.50693697914934, 127.05577247718644)
     });
-  }, [map, keyword]);
+    setFlag(false)
+  }, [map, keyword , message]);
 
   const EventMarkerContainer = ({ position, content, i }: any) => {
     const map = useMap();
@@ -113,7 +114,6 @@ function KakaoKeywordMap() {
     <div className="map_wrap">
       {modalOpen ? <ModalBox/> : ''}
       <Map // 로드뷰를 표시할 Container
-      //
         center={{
           lat: 37.50693697914934,
           lng: 127.05577247718644,
@@ -138,7 +138,9 @@ function KakaoKeywordMap() {
       <SideBar/>
         {/* 사이드바 */}
         <hr />
-        {message ? <div> 예외처리</div> :
+        {!keyword && <MapException/>}
+        {keyword && flag && <SearchException/>}
+        {keyword && !flag &&
          <ul id="placesList">
          {places.map((item, i) => (
            <li
