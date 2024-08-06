@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FavContent from './FavContent';
-import { useAtom } from 'jotai';
-import { latitudeAtom, longitudeAtom } from 'stores/map';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function FavList() {
   const [parsedItem, setParsedItem] = useState<any[]>([]);
@@ -29,23 +29,38 @@ function FavList() {
     setVisibleCount(prevCount => prevCount + 5); // Show 5 more items when clicked
   };
 
+  const moveFavContent = (fromIndex: number, toIndex: number) => {
+    const updatedItems = [...parsedItem];
+    const [movedItem] = updatedItems.splice(fromIndex, 1);
+    updatedItems.splice(toIndex, 0, movedItem);
+    setParsedItem(updatedItems);
+    localStorage.setItem('select', JSON.stringify(updatedItems));
+  };
+
   return (
-    <div>
-      <FavListWrapper>
-        {parsedItem.length === 0 ? (
-          <EmptyMessage>즐겨찾기를 추가해보세요!</EmptyMessage>
-        ) : (
-          <>
-            {parsedItem.slice(0, visibleCount).map((item, index) => (
-              <FavContent key={index} props={item} />
-            ))}
-            {parsedItem.length > 5 && visibleCount < parsedItem.length && (
-              <ShowMoreButton onClick={handleShowMore}>더보기</ShowMoreButton>
-            )}
-          </>
-        )}
-      </FavListWrapper>
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div>
+        <FavListWrapper>
+          {parsedItem.length === 0 ? (
+            <EmptyMessage>즐겨찾기를 추가해보세요!</EmptyMessage>
+          ) : (
+            <>
+              {parsedItem.slice(0, visibleCount).map((item, index) => (
+                <FavContent
+                  key={index}
+                  item={item}
+                  index={index}
+                  moveFavContent={moveFavContent}
+                />
+              ))}
+              {parsedItem.length > 5 && visibleCount < parsedItem.length && (
+                <ShowMoreButton onClick={handleShowMore}>더보기</ShowMoreButton>
+              )}
+            </>
+          )}
+        </FavListWrapper>
+      </div>
+    </DndProvider>
   );
 }
 
