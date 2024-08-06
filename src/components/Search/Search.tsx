@@ -49,7 +49,6 @@ display: flex;
 justify-content: space-between;
 cursor: pointer;
 `
-
 export const SearchInput = styled.input`
 border: 1px solid #D9D9D9;
 border-radius: 10px;

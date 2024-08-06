@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
 import './Map.css';
 import SideBar from 'components/SideBar/SideBar';
-import { categoryStrAtom, searchAllAtom, searchStrAtom } from 'stores/map';
+import { categoryStrAtom, searchAllAtom, searchStrAtom, selectIdAtom, selectItemAtom } from 'stores/map';
 import { useAtom, useAtomValue } from 'jotai';
 import { Link } from 'react-router-dom';
+import { setmodalAtom } from 'stores/modal';
+import ModalBox from 'components/Modal/ModalBox';
+import { favPlaceAtom } from 'stores/search';
 function KakaoKeywordMap() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
   const [places, setPlaces] = useState<any[]>([]);
-  const [message, setMessage] = useState(false); 
+  const [message, setMessage] = useState(false);
+  const [modalOpen, setModalOpen] = useAtom(setmodalAtom);
+  const [favPlace, setFavPlace] = useAtom(favPlaceAtom);
   //검색 or 키워드 나중에 된 것 적용
   const keyword = useAtomValue(searchAllAtom)
-//   const [searchInput, setSearchInput] = useAtom(searchStrAtom);
-//   const [keyword, setKeyword] = useAtom(categoryStrAtom);
-  const [selectedPlace, setSelectedPlace] = useState();
+  const [selectedPlace, setSelectedPlace] = useAtom(selectItemAtom);
 
+ const modalHandler =()=>{
+    setModalOpen(true)
+ }
   const markerImageSrc =
     'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
   const imageSize = { width: 36, height: 37 };
@@ -31,6 +37,7 @@ function KakaoKeywordMap() {
     ps.keywordSearch(keyword,(data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         setPlaces(data);
+        console.log(data)
         /* 이하는 function displayPlaces(places) 함수와 비슷한 내용 */
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -104,6 +111,7 @@ function KakaoKeywordMap() {
 
   return (
     <div className="map_wrap">
+      {modalOpen ? <ModalBox/> : ''}
       <Map // 로드뷰를 표시할 Container
       //
         center={{
@@ -143,7 +151,10 @@ function KakaoKeywordMap() {
                    markers[i].position.lng
                  )
                );
+               //선택한 item 상태관리 저장
                setSelectedPlace(item);
+               console.log('jotai',selectedPlace)
+               setFavPlace(item.address_name)
              }}
            >
              <span className={`markerbg marker_${i + 1}`}></span>
@@ -159,13 +170,17 @@ function KakaoKeywordMap() {
                )}
                <span className="tel">{item.phone}</span>
              </div>
+             <div style={{display:'flex', justifyContent:'space-between'}}>
              <a
-        href={`https://map.kakao.com/?sName=서울 강남구 봉은사로 411&eName=${encodeURIComponent(item.place_name)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        길찾기
-      </a>
+                href={`https://map.kakao.com/?sName=서울 강남구 봉은사로 411&eName=${encodeURIComponent(item.place_name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                길찾기
+                </a>
+                <button onClick={modalHandler}>즐겨찾기</button>
+                <a href={`https://place.map.kakao.com/${encodeURIComponent(item.id)}`}>상세보기</a>
+             </div>
            </li>
          ))}
        </ul>}
