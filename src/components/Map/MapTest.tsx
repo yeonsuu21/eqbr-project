@@ -92,7 +92,7 @@ function KakaoKeywordMap() {
     },{
         //검색 범위 예외처리
         radius: 500,
-        location: new kakao.maps.LatLng(37.50693697914934, 127.05577247718644)
+        location: new kakao.maps.LatLng(37.51087446314432, 127.04499074830632)
     });
     setFlag(false)
   }, [map, keyword , message]);
@@ -130,8 +130,8 @@ function KakaoKeywordMap() {
       {modalOpen ? <ModalBox/> : ''}
       <Map // 로드뷰를 표시할 Container
         center={{
-          lat: 37.50693697914934,
-          lng: 127.05577247718644,
+          lat: 37.51087446314432,
+          lng: 127.04499074830632,
         }}
         style={{
           width: '100%',
