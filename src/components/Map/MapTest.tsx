@@ -10,6 +10,21 @@ import ModalBox from 'components/Modal/ModalBox';
 import { favPlaceAtom } from 'stores/search';
 import MapException from 'components/Exception/MapException';
 import SearchException from 'components/Exception/SearchException';
+import PlacesList from 'components/Content/MapList';
+export interface Place {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
 function KakaoKeywordMap() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
@@ -141,51 +156,14 @@ function KakaoKeywordMap() {
         {!keyword && <MapException/>}
         {keyword && flag && <SearchException/>}
         {keyword && !flag &&
-         <ul id="placesList">
-         {places.map((item, i) => (
-           <li
-             key={i}
-             className="item"
-             onClick={() => {
-               map.panTo(
-                 new kakao.maps.LatLng(
-                   markers[i].position.lat,
-                   markers[i].position.lng
-                 )
-               );
-               //선택한 item 상태관리 저장
-               setSelectedPlace(item);
-               console.log('jotai',selectedPlace)
-               setFavPlace(item.address_name)
-             }}
-           >
-             <span className={`markerbg marker_${i + 1}`}></span>
-             <div className="info">
-               <h5>{item.place_name}</h5>
-               {item.road_address_name ? (
-                 <>
-                   <span>{item.road_address_name}</span>
-                   <span className="jibun gray">{item.address_name}</span>
-                 </>
-               ) : (
-                 <span>{item.address_name}</span>
-               )}
-               <span className="tel">{item.phone}</span>
-             </div>
-             <div style={{display:'flex', justifyContent:'space-between'}}>
-             <a
-                href={`https://map.kakao.com/?sName=서울 강남구 봉은사로 411&eName=${encodeURIComponent(item.place_name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                >
-                길찾기
-                </a>
-                <button onClick={modalHandler}>즐겨찾기</button>
-                <a href={`https://place.map.kakao.com/${encodeURIComponent(item.id)}`}>상세보기</a>
-             </div>
-           </li>
-         ))}
-       </ul>}
+         <PlacesList
+         places={places}
+         map={map}
+         markers={markers}
+         setSelectedPlace={setSelectedPlace}
+         setFavPlace={setFavPlace}
+         modalHandler={modalHandler}
+       />}
        
         <div id="pagination"></div>
       </div>

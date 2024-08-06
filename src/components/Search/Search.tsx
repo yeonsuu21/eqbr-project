@@ -52,8 +52,10 @@ cursor: pointer;
 export const SearchInput = styled.input`
 border: 1px solid #D9D9D9;
 border-radius: 10px;
-height: 2.5rem;
+height: 2.7rem;
 width: 15rem;
+padding-left: 1rem;
+font-size: 13px;
 `
 export const SearchBtn= styled.div`
 height: 2.7rem;

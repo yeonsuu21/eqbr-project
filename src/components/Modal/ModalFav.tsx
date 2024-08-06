@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 export const ModalFavWrapper = styled.div`
-    border: 1px solid red;
     width: 95%;
     height: 90%;
     margin: 0.5rem;

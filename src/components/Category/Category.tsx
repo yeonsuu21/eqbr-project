@@ -56,9 +56,12 @@ export const CategBox = styled.div`
   flex-shrink: 0;
   background-color:#D9D9D9;
   font-size: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   &:hover {
     cursor: pointer;
-    background-color: blue;
+    background-color: #0064FF;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 `;
 
