@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import marker from '../../assets/marker.png';
+import React from "react";
+import styled from "styled-components";
+import marker from "../../assets/marker.png";
 
 function MapException() {
   return (
@@ -15,7 +15,7 @@ function MapException() {
 export default MapException;
 
 const ExceptionWrapper = styled.div`
-margin-top: 3rem;
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,18 +24,22 @@ margin-top: 3rem;
 `;
 
 const Image = styled.img`
-  width: 100px; /* Adjust the size as needed */
+  width: 170px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 `;
 
 const Message = styled.div`
+  font-family: pretendard;
+  font-weight: 600;
   font-size: 16px;
   color: #939393;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-weight: 800;
 `;
 const MessageTitle = styled.div`
-  font-size: 25px;
+  font-family: pretendard;
+  font-size: 23px;
   font-weight: 800;
-  color: #333;
+  color: #505050;
 `;

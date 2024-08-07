@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import FavContent from './FavContent';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import FavContent from "./FavContent";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import FavListExcept from "components/Exception/FavListExcept";
 
 function FavList() {
   const [parsedItem, setParsedItem] = useState<any[]>([]);
@@ -13,7 +14,6 @@ function FavList() {
     if (item) {
       try {
         const parsed = JSON.parse(item);
-        console.log("Parsed item:", parsed);
         if (Array.isArray(parsed)) {
           setParsedItem(parsed);
         } else {
@@ -26,7 +26,7 @@ function FavList() {
   }, []);
 
   const handleShowMore = () => {
-    setVisibleCount(prevCount => prevCount + 5); // Show 5 more items when clicked
+    setVisibleCount((prevCount) => prevCount + 5); // Show 5 more items when clicked
   };
 
   const moveFavContent = (fromIndex: number, toIndex: number) => {
@@ -34,7 +34,7 @@ function FavList() {
     const [movedItem] = updatedItems.splice(fromIndex, 1);
     updatedItems.splice(toIndex, 0, movedItem);
     setParsedItem(updatedItems);
-    localStorage.setItem('select', JSON.stringify(updatedItems));
+    localStorage.setItem("select", JSON.stringify(updatedItems));
   };
 
   return (
@@ -42,7 +42,9 @@ function FavList() {
       <div>
         <FavListWrapper>
           {parsedItem.length === 0 ? (
-            <EmptyMessage>즐겨찾기를 추가해보세요!</EmptyMessage>
+            <EmptyMessage>
+              <FavListExcept />
+            </EmptyMessage>
           ) : (
             <>
               {parsedItem.slice(0, visibleCount).map((item, index) => (
@@ -65,12 +67,12 @@ function FavList() {
 }
 
 export const FavListWrapper = styled.div`
-  width: 40rem;
-  height: 40rem;
-  border: 1px solid black;
-  margin-left: 6rem;
+  width: 35rem;
+  height: 35rem;
+  border: 1px solid #efefef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   margin-top: 3rem;
-  border-radius: 30px;
+  border-radius: 40px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -79,12 +81,12 @@ export const FavListWrapper = styled.div`
 `;
 
 export const ShowMoreButton = styled.button`
-  width: 100%;
-  padding: 1rem;
+  width: 70%;
   border: none;
   background-color: #007bff;
   color: white;
   cursor: pointer;
+  font-weight: 700;
   border-radius: 0 0 30px 30px;
   &:hover {
     background-color: #0056b3;

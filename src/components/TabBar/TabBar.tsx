@@ -1,78 +1,107 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import logo from '../../assets/logo.png';
-import toss from '../../assets/toss.png';
+import logo from "../../assets/logo.png";
+import { useAtom } from "jotai";
+import { selectTabAtom } from "stores/map";
 
 function TabBar() {
-  const navigate = useNavigate();   
-  
+  const navigate = useNavigate();
+  const [flag, setFlag] = useAtom(selectTabAtom);
+
   const routeFav = () => {
-    navigate('/fav');
-  }
+    setFlag(true);
+    navigate("/fav");
+  };
 
   const routeMain = () => {
-    navigate('/');
-  }
+    setFlag(true);
+    navigate("/");
+  };
 
   return (
     <TabBarWapper>
       <Logo>
-        <LogoImg src={toss} alt='logo'/>
+        <LogoImg src={logo} alt="logo" />
       </Logo>
       <TabStr>
-        <div className='map' onClick={routeMain}>
-         지도
-        </div>
-        <div className='fav' onClick={routeFav}>
-          즐겨찾기
-        </div>
+        {flag ? (
+          <div className="map-act" onClick={routeMain}>
+            지도
+          </div>
+        ) : (
+          <div className="map" onClick={routeMain}>
+            지도
+          </div>
+        )}
+        {flag ? (
+          <div className="fav-act" onClick={routeFav}>
+            즐겨찾기
+          </div>
+        ) : (
+          <div className="fav" onClick={routeFav}>
+            즐겨찾기
+          </div>
+        )}
       </TabStr>
     </TabBarWapper>
-  )
+  );
 }
 
 export const TabBarWapper = styled.div`
-  height: 4.5rem;
+  height: 3.8rem;
   display: flex;
-  background-color: #0064FF;
+  background-color: #253bff;
   border-bottom-left-radius: 36px;
   border-bottom-right-radius: 36px;
 `;
 
 export const Logo = styled.div`
-  width: 3.5rem;
-  height: 3.5rem;
- margin-left: 2rem;
- margin-top: 0.5rem;
+  width: 10rem;
+  height: 4rem;
+  margin-left: 2rem;
+  margin-top: 0.1rem;
 `;
 
 export const LogoImg = styled.img`
- width: 3.5rem;
- height: 3.5rem;
+  width: 9rem;
+  height: 3.3rem;
 `;
 
 export const TabStr = styled.div`
   display: flex;
   align-items: center;
- margin-left: 5rem;
+  margin-left: 5rem;
 
-  .map{
-    color: #EEEEEE;
-    font-size: 23px;
+  .map {
+    color: #eeeeee;
+    font-size: 22px;
     font-weight: 600;
     margin-right: 5rem;
     cursor: pointer;
     font-family: pretendard;
   }
-  .map:active{
-    color: red;
+  .map-act {
+    color: #eeeeee;
+    font-size: 22px;
+    font-weight: 600;
+    margin-right: 5rem;
+    cursor: pointer;
+    font-family: pretendard;
   }
-  .fav{
-    color: #EEEEEE;
-    font-size: 23px;
+  .fav {
+    color: #eeeeee;
+    font-size: 20.5px;
     font-weight: 600;
     cursor: pointer;
+    font-family: pretendard;
+  }
+  .fav-act {
+    color: #eeeeee;
+    font-size: 20.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: pretendard;
   }
 `;
 

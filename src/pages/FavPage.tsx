@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import TabBar from '../../src/components/TabBar/TabBar';
-import FavList from 'components/Fav/FavList';
-import FavMap from 'components/Map/FavMap';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import TabBar from "../../src/components/TabBar/TabBar";
+import FavList from "components/Fav/FavList";
+import FavMap from "components/Map/FavMap";
+import styled from "styled-components";
 
 function FavPage() {
-
   return (
     <div>
       <TabBar />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <FavPageWrapper>
           <FavList />
           <FavMap />
@@ -23,7 +28,6 @@ export const FavPageWrapper = styled.div`
   width: 90%;
   height: 70%;
   display: flex;
-  border: 1px solid red;
 `;
 
 export default FavPage;

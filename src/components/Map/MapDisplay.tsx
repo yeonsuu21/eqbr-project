@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface MapDisplayProps {
   searchPlace: string;
@@ -12,7 +12,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
     const { kakao }: any = window;
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     var markers: any[] = [];
-    const container = document.getElementById('myMap');
+    const container = document.getElementById("myMap");
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
@@ -20,17 +20,22 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
     const map = new kakao.maps.Map(container, options);
     const ps = new kakao.maps.services.Places();
 
-    if (searchPlace === '') {
+    if (searchPlace === "") {
       setNoResults(false);
-      const defaultLatLng = new kakao.maps.LatLng(37.50693697914934, 127.05577247718644);
+      const defaultLatLng = new kakao.maps.LatLng(
+        37.50693697914934,
+        127.05577247718644
+      );
       let marker = new kakao.maps.Marker({
         map: map,
         position: defaultLatLng,
       });
       map.setCenter(defaultLatLng);
 
-      kakao.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">eqbr홀딩스</div>');
+      kakao.maps.event.addListener(marker, "click", function () {
+        infowindow.setContent(
+          '<div style="padding:5px;font-size:12px;">eqbr홀딩스</div>'
+        );
         infowindow.open(map, marker);
       });
       //기본 지워놓음
@@ -48,7 +53,9 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
         if (data.length === 0) {
           setNoResults(true);
           setPlaces([]);
-          map.setCenter(new kakao.maps.LatLng(37.50693697914934, 127.05577247718644)); // Optional: Center the map to default location if no results
+          map.setCenter(
+            new kakao.maps.LatLng(37.50693697914934, 127.05577247718644)
+          ); // Optional: Center the map to default location if no results
         } else {
           setNoResults(false);
           let bounds = new kakao.maps.LatLngBounds();
@@ -67,21 +74,21 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
     }
 
     function displayPagination(pagination: any) {
-      var paginationEl = document.getElementById('pagination'),
+      var paginationEl = document.getElementById("pagination"),
         fragment = document.createDocumentFragment(),
         i;
 
       if (paginationEl) {
-        paginationEl.innerHTML = '';
+        paginationEl.innerHTML = "";
       }
 
       for (i = 1; i <= pagination.last; i++) {
-        var el = document.createElement('a');
-        el.href = '#';
+        var el = document.createElement("a");
+        el.href = "#";
         el.innerHTML = i.toString();
 
         if (i === pagination.current) {
-          el.className = 'on';
+          el.className = "on";
         } else {
           el.onclick = (function (i) {
             return function () {
@@ -101,8 +108,12 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
         position: new kakao.maps.LatLng(place.y, place.x),
       });
 
-      kakao.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+      kakao.maps.event.addListener(marker, "click", function () {
+        infowindow.setContent(
+          '<div style="padding:5px;font-size:12px;">' +
+            place.place_name +
+            "</div>"
+        );
         infowindow.open(map, marker);
       });
     }
@@ -111,9 +122,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ searchPlace, setPlaces }) => {
   return (
     <div>
       {noResults ? (
-        <div style={{ textAlign: 'center', padding: '20px' }}>지도가 로딩 되지 않습니다</div>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          지도가 로딩 되지 않습니다
+        </div>
       ) : (
-        <div id="myMap" style={{ width: '88rem', height: '65rem' }}></div>
+        <div id="myMap" style={{ width: "88rem", height: "65rem" }}></div>
       )}
     </div>
   );

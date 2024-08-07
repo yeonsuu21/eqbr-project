@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Map, MapMarker, useMap } from 'react-kakao-maps-sdk';
-import './Map.css';
-import SideBar from 'components/SideBar/SideBar';
-import { categoryStrAtom, searchAllAtom, searchStrAtom, selectIdAtom, selectItemAtom } from 'stores/map';
-import { useAtom, useAtomValue } from 'jotai';
-import { Link } from 'react-router-dom';
-import { setmodalAtom } from 'stores/modal';
-import ModalBox from 'components/Modal/ModalBox';
-import { favPlaceAtom } from 'stores/search';
-import MapException from 'components/Exception/MapException';
-import SearchException from 'components/Exception/SearchException';
-import PlacesList from 'components/Content/MapList';
+import React, { useState, useEffect } from "react";
+import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
+import "./Map.css";
+import SideBar from "components/SideBar/SideBar";
+import {
+  categoryStrAtom,
+  searchAllAtom,
+  searchStrAtom,
+  selectIdAtom,
+  selectItemAtom,
+} from "stores/map";
+import { useAtom, useAtomValue } from "jotai";
+import { Link } from "react-router-dom";
+import { setmodalAtom } from "stores/modal";
+import ModalBox from "components/Modal/ModalBox";
+import { favPlaceAtom } from "stores/search";
+import MapException from "components/Exception/MapException";
+import SearchException from "components/Exception/SearchException";
+import PlacesList from "components/Content/MapList";
+import MapOverlay from "components/Content/MapOverlay";
 export interface Place {
   address_name: string;
   category_group_code: string;
@@ -32,72 +39,81 @@ function KakaoKeywordMap() {
   const [message, setMessage] = useState(false);
   const [modalOpen, setModalOpen] = useAtom(setmodalAtom);
   const [favPlace, setFavPlace] = useAtom(favPlaceAtom);
+  const [Add, setAdd] = useState("");
   //검색결과
   const [flag, setFlag] = useState(false);
   //검색 or 키워드 나중에 된 것 적용
-  const keyword = useAtomValue(searchAllAtom)
+  const keyword = useAtomValue(searchAllAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectItemAtom);
 
- const modalHandler =()=>{
-    setModalOpen(true)
- }
+  const modalHandler = () => {
+    setModalOpen(true);
+  };
   const markerImageSrc =
-    'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
   const imageSize = { width: 36, height: 37 };
   const spriteSize = { width: 36, height: 691 };
-  console.log(message)
   useEffect(() => {
     if (!map) return;
-    if (keyword==null) {
-        setMessage(true);
-        return;
+    if (keyword == null) {
+      setMessage(true);
+      return;
     }
     const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(keyword,(data, status, _pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        setPlaces(data);
-        console.log(data)
-        /* 이하는 function displayPlaces(places) 함수와 비슷한 내용 */
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers = [];
+    ps.keywordSearch(
+      keyword,
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          setPlaces(data);
+          /* 이하는 function displayPlaces(places) 함수와 비슷한 내용 */
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          const bounds = new kakao.maps.LatLngBounds();
+          let markers = [];
 
-        for (var i = 0; i < data.length; i++) {
-          // @ts-ignore
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x,
-            },
-            content: data[i].place_name,
-          });
-          // @ts-ignore
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          for (var i = 0; i < data.length; i++) {
+            // @ts-ignore
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+              address: data[i].address_name,
+              phone: data[i].phone,
+              road: data[i].road_address_name,
+            });
+            // @ts-ignore
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+          setMarkers(markers);
+
+          map.setBounds(bounds);
+        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+          setFlag(true);
+          return;
+        } else if (status === kakao.maps.services.Status.ERROR) {
+          alert("검색 결과 중 오류가 발생했습니다.");
+          return;
         }
-        setMarkers(markers);
-
-    
-        map.setBounds(bounds);
-      }else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        setFlag(true)
-        return;
- 
-    } else if (status === kakao.maps.services.Status.ERROR) {
- 
-        alert('검색 결과 중 오류가 발생했습니다.');
-        return;
- 
-    }
-    },{
+      },
+      {
         //검색 범위 예외처리
         radius: 500,
-        location: new kakao.maps.LatLng(37.51087446314432, 127.04499074830632)
-    });
-    setFlag(false)
-  }, [map, keyword , message]);
+        location: new kakao.maps.LatLng(37.51087446314432, 127.04499074830632),
+      }
+    );
+    setFlag(false);
+  }, [map, keyword, message]);
 
-  const EventMarkerContainer = ({ position, content, i }: any) => {
+  const EventMarkerContainer = ({
+    position,
+    content,
+    i,
+    address,
+    phone,
+    road,
+  }: any) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 
@@ -120,22 +136,28 @@ function KakaoKeywordMap() {
         onMouseOver={() => setIsVisible(true)}
         onMouseOut={() => setIsVisible(false)}
       >
-        {isVisible && <div style={{ color: '#000' }}>{content}</div>}
+        {isVisible && (
+          <MapOverlay
+            content={content}
+            address={address}
+            phone={phone}
+            road={road}
+          />
+        )}
       </MapMarker>
     );
   };
-
   return (
     <div className="map_wrap">
-      {modalOpen ? <ModalBox/> : ''}
+      {modalOpen ? <ModalBox /> : ""}
       <Map // 로드뷰를 표시할 Container
         center={{
           lat: 37.51087446314432,
           lng: 127.04499074830632,
         }}
         style={{
-          width: '100%',
-          height: '100vh',
+          width: "100%",
+          height: "100vh",
         }}
         level={3}
         onCreate={setMap}
@@ -145,26 +167,30 @@ function KakaoKeywordMap() {
             key={`EventMarkerContainer-${marker.position.lat}-${marker.position.lng}`}
             position={marker.position}
             content={marker.content}
+            address={marker.address}
+            phone={marker.phone}
             i={i}
+            road={marker.road}
           />
         ))}
       </Map>
       <div id="menu_wrap" className="bg_white">
-      <SideBar/>
+        <SideBar />
         {/* 사이드바 */}
         <hr />
-        {!keyword && <MapException/>}
-        {keyword && flag && <SearchException/>}
-        {keyword && !flag &&
-         <PlacesList
-         places={places}
-         map={map}
-         markers={markers}
-         setSelectedPlace={setSelectedPlace}
-         setFavPlace={setFavPlace}
-         modalHandler={modalHandler}
-       />}
-       
+        {!keyword && <MapException />}
+        {keyword && flag && <SearchException />}
+        {keyword && !flag && (
+          <PlacesList
+            places={places}
+            map={map}
+            markers={markers}
+            setSelectedPlace={setSelectedPlace}
+            setFavPlace={setFavPlace}
+            modalHandler={modalHandler}
+          />
+        )}
+
         <div id="pagination"></div>
       </div>
     </div>

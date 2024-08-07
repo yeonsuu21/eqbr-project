@@ -1,15 +1,15 @@
-import React from 'react'
-import TabBar from '.././components/TabBar/TabBar'
-import Map from '../components/Map/Map'
+import React from "react";
+import TabBar from ".././components/TabBar/TabBar";
+import Map from "../components/Map/Map";
 function MapPage() {
   return (
     <div className="App">
-      <TabBar/>
+      <TabBar />
       <div>
-        <Map/>
+        <Map />
       </div>
     </div>
-  )
+  );
 }
 
-export default MapPage
+export default MapPage;

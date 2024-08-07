@@ -2,7 +2,8 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAtomValue } from "jotai";
-import { latitudeAtom, longitudeAtom } from "stores/map";
+import { latitudeAtom, longitudeAtom } from "stores/favorite";
+import FavMapExcept from "components/Exception/FavMapExcept";
 
 function FavMap() {
   const latitude = useAtomValue(latitudeAtom);
@@ -42,7 +43,9 @@ function FavMap() {
           <MapMarker position={position} />
         </Map>
       ) : (
-        <NoSelectionMessage>지도를 클릭해주세요!</NoSelectionMessage>
+        <NoSelectionMessage>
+          <FavMapExcept />
+        </NoSelectionMessage>
       )}
     </FavMapWrapper>
   );
@@ -50,8 +53,9 @@ function FavMap() {
 
 export const FavMapWrapper = styled.div`
   width: 40rem;
-  height: 40rem;
-  border: 1px solid black;
+  height: 35rem;
+  border: 1px solid #efefef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-left: 6rem;
   margin-top: 3rem;
   border-radius: 30px;
