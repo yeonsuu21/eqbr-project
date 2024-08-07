@@ -1,8 +1,9 @@
+import { click } from "@testing-library/user-event/dist/click";
 import { Place } from "components/Map/MapTest";
 import { useAtom } from "jotai";
 import { none } from "ol/centerconstraint";
 import React from "react";
-import { selectAdrAtom, selectPhoneAtom, selectSubAdrAtom } from "stores/map";
+import { selectAdrAtom, selectIdAtom, selectPhoneAtom, selectSubAdrAtom } from "stores/map";
 
 interface PlacesListProps {
   places: Place[];
@@ -24,6 +25,7 @@ const PlacesList: React.FC<PlacesListProps> = ({
   const [selectAdr, setSelectAdr] = useAtom(selectAdrAtom);
   const [selectPhone, setSelectPhone] = useAtom(selectPhoneAtom);
   const [selectSubAdr, setSelectSubAdr] = useAtom(selectSubAdrAtom);
+  const [selectID, setSelectID] = useAtom(selectIdAtom);
   return (
     <ul id="placesList">
       {places.map((item, i) => (
@@ -39,6 +41,7 @@ const PlacesList: React.FC<PlacesListProps> = ({
             );
             setSelectedPlace(item);
             setFavPlace(item.address_name);
+            setSelectID(item.id)
           }}
         >
           <span className={`markerbg marker_${i + 1}`}></span>

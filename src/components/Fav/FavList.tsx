@@ -4,9 +4,11 @@ import FavContent from "./FavContent";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import FavListExcept from "components/Exception/FavListExcept";
+import { favListArrayAtom } from "stores/favorite";
+import { useAtom } from "jotai";
 
 function FavList() {
-  const [parsedItem, setParsedItem] = useState<any[]>([]);
+  const [parsedItem, setParsedItem] = useAtom(favListArrayAtom);
   const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
@@ -17,14 +19,13 @@ function FavList() {
         if (Array.isArray(parsed)) {
           setParsedItem(parsed);
         } else {
-          console.error("Parsed item is not an array");
+          console.error("배열이 아닙니다");
         }
       } catch (error) {
-        console.error("Failed to parse", error);
+        console.error("오류", error);
       }
     }
   }, []);
-
   const handleShowMore = () => {
     setVisibleCount((prevCount) => Math.min(prevCount + 5, parsedItem.length)); 
   };
@@ -39,33 +40,33 @@ function FavList() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-        <FavListWrapper>
-          {parsedItem.length === 0 ? (
-            <EmptyMessage>
-              <FavListExcept />
-            </EmptyMessage>
-          ) : (
-            <>
-              {parsedItem.slice(0, visibleCount).map((item, index) => (
-                <FavContent
-                  key={index}
-                  item={item}
-                  index={index}
-                  moveFavContent={moveFavContent}
-                />
-              ))}
-              {visibleCount < parsedItem.length && (
-                <ShowMoreButton onClick={handleShowMore}>더보기</ShowMoreButton>
-              )}
-            </>
-          )}
-        </FavListWrapper>
+      <FavListWrapper>
+        {parsedItem.length === 0 ? (
+          <EmptyMessage>
+            <FavListExcept />
+          </EmptyMessage>
+        ) : (
+          <>
+            {parsedItem.slice(0, visibleCount).map((item, index) => (
+              <FavContent
+                key={index}
+                item={item}
+                index={index}
+                moveFavContent={moveFavContent}
+              />
+            ))}
+            {visibleCount < parsedItem.length && (
+              <ShowMoreButton onClick={handleShowMore}>더보기</ShowMoreButton>
+            )}
+          </>
+        )}
+      </FavListWrapper>
     </DndProvider>
   );
 }
 
 export const FavListWrapper = styled.div`
-padding: 1rem 0;
+  padding: 1rem 0;
   width: 35rem;
   height: 35rem;
   border: 1px solid #efefef; 

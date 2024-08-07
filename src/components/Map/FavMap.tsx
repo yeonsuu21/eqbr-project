@@ -53,7 +53,7 @@ function FavMap() {
 
 export const FavMapWrapper = styled.div`
   width: 40rem;
-  height: 35rem;
+  height: 36.8rem;
   border: 1px solid #efefef;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-left: 6rem;

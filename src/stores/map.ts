@@ -12,7 +12,7 @@ export const categoryHistoryAtom = atom<string[]>([]);
 //카테고리 + 키워드
 export const searchAllAtom = atom<string>("");
 
-export const selectIdAtom = atom<string>("");
+export const selectIdAtom = atom<string>('');
 //선택한 정보 전체
 export const selectItemAtom = atom<Place | null>(null);
 

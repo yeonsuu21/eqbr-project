@@ -26,7 +26,7 @@ function FavPage() {
 
 export const FavPageWrapper = styled.div`
   width: 90%;
-  height: 70%;
+  height: 60%;
   display: flex;
 `;
 
