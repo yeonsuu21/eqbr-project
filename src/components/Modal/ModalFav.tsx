@@ -22,7 +22,7 @@ export const FavTitle = styled.div`
 margin-top: 1.7rem;
     font-size: 28px;
     font-weight: 700;
-    color: #333333;
+    color: black;
     margin-bottom: 3rem;
 `;
 
@@ -35,6 +35,8 @@ export const FavSelectPlace = styled.input`
     margin-bottom: 1.4rem;
     font-size: 16px;
     padding-left: 1rem;
+    font-weight: 600;
+    color: #505050;
 `;
 
 export const FavSelectMemo = styled.input`
@@ -45,6 +47,8 @@ export const FavSelectMemo = styled.input`
     border: none;
     font-size: 16px;
     padding-left: 1rem;
+    font-weight: 600;
+    color: #505050;
 `;
 
 export const BtnWrapper = styled.div`
@@ -96,17 +100,17 @@ function ModalFav() {
     };
 
     const actFav = () => {
-        // Check for duplicate ID
+        //ID 중복 확인
         const isDuplicate = favList.some(item => item.id === selectedId);
         if (isDuplicate) {
             alert('이미 등록된 장소입니다');
+            setModalOpen(false);
             return;
         }
 console.log(selectedId)
         alert('즐겨찾기에 등록 되었습니다');
         setModalOpen(false);
 
-        // Get existing data and combine with the new data
         const existingSelects = localStorage.getItem('select');
         let parsedExistingSelects = [];
 
@@ -122,7 +126,7 @@ console.log(selectedId)
         }
 
         const updatedSelects = [selectItem, ...parsedExistingSelects];
-        setFavList(updatedSelects); // Update the atom state
+        setFavList(updatedSelects);
         localStorage.setItem('select', JSON.stringify(updatedSelects));
         navigate('/fav');
     };
