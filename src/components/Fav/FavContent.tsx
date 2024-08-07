@@ -38,7 +38,7 @@ const FavContent: React.FC<FavContentProps> = ({
   const selectAdress = useSetAtom(selectAdressAtom)
   const selectSubAdr = useSetAtom(selectFavSubAdrAtom)
   const selectPhone = useSetAtom(selectFavPhoneAtom)
-
+  const arrange = index+1
   const handleItemClick = () => {
     if (item) {
       setLatitude(parseFloat(item.y));
@@ -89,6 +89,8 @@ const FavContent: React.FC<FavContentProps> = ({
       onClick={handleItemClick}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
+      <Arrange>{arrange}</Arrange>
+      <div style={{width:'100%'}}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <FCTitle>{item.place_name}</FCTitle>
         <FCTImage onClick={deleteFav}>
@@ -135,6 +137,7 @@ const FavContent: React.FC<FavContentProps> = ({
           </a>
         </div>
       </div>
+      </div>
     </FavContentWrapper>
   );
 };
@@ -149,10 +152,17 @@ export const FavContentWrapper = styled.div`
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
   cursor: move;
+  display: flex;
 `;
 export const FCTImage = styled.div`
   cursor: pointer;
 `;
+export const Arrange = styled.div`
+  font-size: 30px;
+  font-weight: 800;
+  margin-right: 2rem;
+  color:#979797;
+`
 export const FCTitle = styled.div`
   font-size: 20px;
   font-family: pretandard;

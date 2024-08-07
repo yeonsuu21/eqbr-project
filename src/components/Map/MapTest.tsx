@@ -156,7 +156,7 @@ function KakaoKeywordMap() {
         level={3}
         onCreate={setMap}
       >
-        {(!keyword || places.length === 0) && (
+        {(keyword || places.length === 0 ||places.length !==0) && (
           <MapMarker 
             position={defaultCenter}
             image={{
