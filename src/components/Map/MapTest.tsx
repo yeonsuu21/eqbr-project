@@ -3,14 +3,10 @@ import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import "./Map.css";
 import SideBar from "components/SideBar/SideBar";
 import {
-  categoryStrAtom,
   searchAllAtom,
-  searchStrAtom,
-  selectIdAtom,
   selectItemAtom,
 } from "stores/map";
 import { useAtom, useAtomValue } from "jotai";
-import { Link } from "react-router-dom";
 import { setmodalAtom } from "stores/modal";
 import ModalBox from "components/Modal/ModalBox";
 import { favPlaceAtom } from "stores/search";
@@ -18,6 +14,7 @@ import MapException from "components/Exception/MapException";
 import SearchException from "components/Exception/SearchException";
 import PlacesList from "components/Content/MapList";
 import MapOverlay from "components/Content/MapOverlay";
+
 export interface Place {
   address_name: string;
   category_group_code: string;
@@ -32,6 +29,12 @@ export interface Place {
   x: string;
   y: string;
 }
+
+const defaultCenter = {
+  lat: 37.51087446314432,
+  lng: 127.04499074830632,
+};
+
 function KakaoKeywordMap() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
@@ -40,19 +43,20 @@ function KakaoKeywordMap() {
   const [modalOpen, setModalOpen] = useAtom(setmodalAtom);
   const [favPlace, setFavPlace] = useAtom(favPlaceAtom);
   const [Add, setAdd] = useState("");
-  //검색결과
   const [flag, setFlag] = useState(false);
-  //검색 or 키워드 나중에 된 것 적용
   const keyword = useAtomValue(searchAllAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectItemAtom);
 
   const modalHandler = () => {
     setModalOpen(true);
   };
-  const markerImageSrc =
-    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
+
+  const specialMarkerSrc = "https://i.ibb.co/dgfdZVr/Pngtree-3d-pinpoint-location-marker-icon-15108674.png";
+  const markerImageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
   const imageSize = { width: 36, height: 37 };
+  const specialImageSize = { width: 70, height: 70 };
   const spriteSize = { width: 36, height: 691 };
+
   useEffect(() => {
     if (!map) return;
     if (keyword == null) {
@@ -65,29 +69,23 @@ function KakaoKeywordMap() {
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
           setPlaces(data);
-          /* 이하는 function displayPlaces(places) 함수와 비슷한 내용 */
-          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-          // LatLngBounds 객체에 좌표를 추가합니다
           const bounds = new kakao.maps.LatLngBounds();
           let markers = [];
 
           for (var i = 0; i < data.length; i++) {
-            // @ts-ignore
             markers.push({
               position: {
-                lat: data[i].y,
-                lng: data[i].x,
+                lat: parseFloat(data[i].y),
+                lng: parseFloat(data[i].x),
               },
               content: data[i].place_name,
               address: data[i].address_name,
               phone: data[i].phone,
               road: data[i].road_address_name,
             });
-            // @ts-ignore
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+            bounds.extend(new kakao.maps.LatLng(parseFloat(data[i].y), parseFloat(data[i].x)));
           }
           setMarkers(markers);
-
           map.setBounds(bounds);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
           setFlag(true);
@@ -98,9 +96,8 @@ function KakaoKeywordMap() {
         }
       },
       {
-        //검색 범위 예외처리
         radius: 500,
-        location: new kakao.maps.LatLng(37.51087446314432, 127.04499074830632),
+        location: new kakao.maps.LatLng(defaultCenter.lat, defaultCenter.lng),
       }
     );
     setFlag(false);
@@ -147,14 +144,12 @@ function KakaoKeywordMap() {
       </MapMarker>
     );
   };
+
   return (
     <div className="map_wrap">
       {modalOpen ? <ModalBox /> : ""}
-      <Map // 로드뷰를 표시할 Container
-        center={{
-          lat: 37.51087446314432,
-          lng: 127.04499074830632,
-        }}
+      <Map
+        center={defaultCenter}
         style={{
           width: "100%",
           height: "100vh",
@@ -162,6 +157,15 @@ function KakaoKeywordMap() {
         level={3}
         onCreate={setMap}
       >
+        {(!keyword || places.length === 0) && (
+          <MapMarker
+            position={defaultCenter}
+            image={{
+              src: specialMarkerSrc,
+              size: specialImageSize,
+            }}
+          />
+        )}
         {markers.map((marker, i) => (
           <EventMarkerContainer
             key={`EventMarkerContainer-${marker.position.lat}-${marker.position.lng}`}
@@ -176,7 +180,6 @@ function KakaoKeywordMap() {
       </Map>
       <div id="menu_wrap" className="bg_white">
         <SideBar />
-        {/* 사이드바 */}
         <hr />
         {!keyword && <MapException />}
         {keyword && flag && <SearchException />}
@@ -190,7 +193,6 @@ function KakaoKeywordMap() {
             modalHandler={modalHandler}
           />
         )}
-
         <div id="pagination"></div>
       </div>
     </div>
