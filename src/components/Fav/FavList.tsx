@@ -7,7 +7,7 @@ import FavListExcept from "components/Exception/FavListExcept";
 
 function FavList() {
   const [parsedItem, setParsedItem] = useState<any[]>([]);
-  const [visibleCount, setVisibleCount] = useState(5); // Start by showing 5 items
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
     const item = localStorage.getItem("select");
@@ -26,7 +26,7 @@ function FavList() {
   }, []);
 
   const handleShowMore = () => {
-    setVisibleCount((prevCount) => prevCount + 5); // Show 5 more items when clicked
+    setVisibleCount((prevCount) => Math.min(prevCount + 5, parsedItem.length)); 
   };
 
   const moveFavContent = (fromIndex: number, toIndex: number) => {
@@ -55,7 +55,7 @@ function FavList() {
                   moveFavContent={moveFavContent}
                 />
               ))}
-              {parsedItem.length > 5 && visibleCount < parsedItem.length && (
+              {visibleCount < parsedItem.length && (
                 <ShowMoreButton onClick={handleShowMore}>더보기</ShowMoreButton>
               )}
             </>
@@ -88,6 +88,7 @@ export const ShowMoreButton = styled.button`
   cursor: pointer;
   font-weight: 700;
   border-radius: 0 0 30px 30px;
+  margin-bottom: 1rem;
   &:hover {
     background-color: #0056b3;
   }
