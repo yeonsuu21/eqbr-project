@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useAtomValue } from "jotai";
 import { latitudeAtom, longitudeAtom } from "stores/favorite";
 import FavMapExcept from "components/Exception/FavMapExcept";
+import MapOverlay from "components/Content/MapOverlay"; // Make sure this is the correct path to MapOverlay
 
 function FavMap() {
   const latitude = useAtomValue(latitudeAtom);
@@ -13,6 +14,8 @@ function FavMap() {
     lat: number;
     lng: number;
   } | null>(null);
+
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (latitude !== null && longitude !== null) {
@@ -40,7 +43,20 @@ function FavMap() {
             });
           }}
         >
-          <MapMarker position={position} />
+          <MapMarker
+            position={position}
+            onMouseOver={() => setIsVisible(true)}
+            onMouseOut={() => setIsVisible(false)}
+          >
+            {isVisible && (
+              <MapOverlay
+                content="Your location"
+                address="Your address"
+                phone="000"
+                road="Your road address"
+              />
+            )}
+          </MapMarker>
         </Map>
       ) : (
         <NoSelectionMessage>

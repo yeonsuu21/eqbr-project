@@ -4,7 +4,7 @@ import styled from "styled-components";
 interface OverlayProps {
   content: string;
   address: string;
-  phone: number;
+  phone: string | number;
   road: string;
 }
 const MapOverlay: React.FC<OverlayProps> = ({
