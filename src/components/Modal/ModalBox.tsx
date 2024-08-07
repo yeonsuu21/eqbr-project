@@ -5,7 +5,6 @@ import { setmodalAtom } from "stores/modal";
 import styled from "styled-components";
 import ModalFav from "./ModalFav";
 
-// Ensure Modal.setAppElement is called at the root of your app
 Modal.setAppElement("#root");
 
 function ModalBox() {

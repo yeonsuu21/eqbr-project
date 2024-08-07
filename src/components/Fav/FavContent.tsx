@@ -51,7 +51,7 @@ const FavContent: React.FC<FavContentProps> = ({
   };
 
   const deleteFav = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the click event on the wrapper
+    e.stopPropagation(); 
     const existingItems = JSON.parse(localStorage.getItem("select") || "[]");
     const updatedItems = existingItems.filter(
       (favItem: any) => favItem.id !== item.id
