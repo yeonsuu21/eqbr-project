@@ -33,12 +33,12 @@ const PlacesList: React.FC<PlacesListProps> = ({
           key={i}
           className="item"
           onClick={() => {
-            map.panTo(
-              new kakao.maps.LatLng(
-                markers[i].position.lat,
-                markers[i].position.lng
-              )
-            );
+            // map.panTo(
+            //   new kakao.maps.LatLng(
+            //     markers[i].position.lat,
+            //     markers[i].position.lng
+            //   )
+            // );
             setSelectedPlace(item);
             setFavPlace(item.address_name);
             setSelectID(item.id)
