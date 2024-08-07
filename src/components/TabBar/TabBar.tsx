@@ -75,7 +75,6 @@ export const TabStr = styled.div`
     font-size: 22px;
     font-weight: 600;
     margin-right: 5rem;
-    cursor: pointer;
     font-family: pretendard;
   }
   .fav {
@@ -89,7 +88,6 @@ export const TabStr = styled.div`
     color: #eeeeee;
     font-size: 20.5px;
     font-weight: 600;
-    cursor: pointer;
     font-family: pretendard;
   }
 `;

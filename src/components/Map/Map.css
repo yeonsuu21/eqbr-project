@@ -76,9 +76,14 @@
   margin-bottom: 0.5rem;
   padding: 0.3rem 0.6rem;
   background-color: white;
-  &:hover {
-    background-color: #ebedff;
-  }
+}
+
+#placesList .item:hover {
+  background-color: #EFF1FF;
+}
+
+#placesList .item.selected {
+  background-color: #EFF1FF;
 }
 
 #placesList .item span {

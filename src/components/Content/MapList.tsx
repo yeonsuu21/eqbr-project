@@ -1,9 +1,7 @@
-import { click } from "@testing-library/user-event/dist/click";
+import React, { useState } from "react";
 import { Place } from "components/Map/MapTest";
 import { useAtom } from "jotai";
-import { none } from "ol/centerconstraint";
-import React from "react";
-import { selectAdrAtom, selectIdAtom, selectPhoneAtom, selectSubAdrAtom } from "stores/map";
+import { selectIdAtom } from "stores/map";
 
 interface PlacesListProps {
   places: Place[];
@@ -22,27 +20,23 @@ const PlacesList: React.FC<PlacesListProps> = ({
   setFavPlace,
   modalHandler,
 }) => {
-  const [selectAdr, setSelectAdr] = useAtom(selectAdrAtom);
-  const [selectPhone, setSelectPhone] = useAtom(selectPhoneAtom);
-  const [selectSubAdr, setSelectSubAdr] = useAtom(selectSubAdrAtom);
   const [selectID, setSelectID] = useAtom(selectIdAtom);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleClick = (index: number, item: Place) => {
+    setSelectedIndex(index);
+    setSelectedPlace(item);
+    setFavPlace(item.address_name);
+    setSelectID(item.id);
+  };
+
   return (
     <ul id="placesList">
       {places.map((item, i) => (
         <div
           key={i}
-          className="item"
-          onClick={() => {
-            // map.panTo(
-            //   new kakao.maps.LatLng(
-            //     markers[i].position.lat,
-            //     markers[i].position.lng
-            //   )
-            // );
-            setSelectedPlace(item);
-            setFavPlace(item.address_name);
-            setSelectID(item.id)
-          }}
+          className={`item ${selectedIndex === i ? "selected" : ""}`}
+          onClick={() => handleClick(i, item)}
         >
           <span className={`markerbg marker_${i + 1}`}></span>
           <div className="info">
