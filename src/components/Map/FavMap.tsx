@@ -2,14 +2,17 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAtomValue } from "jotai";
-import { latitudeAtom, longitudeAtom } from "stores/favorite";
+import { latitudeAtom, longitudeAtom, selectAdressAtom, selectContentAtom, selectFavPhoneAtom, selectFavSubAdrAtom } from "stores/favorite";
 import FavMapExcept from "components/Exception/FavMapExcept";
-import MapOverlay from "components/Content/MapOverlay"; // Make sure this is the correct path to MapOverlay
+import MapOverlay from "components/Content/MapOverlay";
 
 function FavMap() {
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
-
+  const content = useAtomValue(selectContentAtom);
+  const adress=useAtomValue(selectAdressAtom);
+  const subAdr = useAtomValue(selectFavSubAdrAtom);
+  const phone = useAtomValue(selectFavPhoneAtom)
   const [position, setPosition] = useState<{
     lat: number;
     lng: number;
@@ -50,10 +53,10 @@ function FavMap() {
           >
             {isVisible && (
               <MapOverlay
-                content="Your location"
-                address="Your address"
-                phone="000"
-                road="Your road address"
+                content={content}
+                address={adress}
+                phone={phone}
+                road={subAdr}
               />
             )}
           </MapMarker>

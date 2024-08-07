@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSetAtom } from "jotai";
-import { latitudeAtom, longitudeAtom } from "stores/favorite";
+import { latitudeAtom, longitudeAtom, selectAdressAtom, selectContentAtom, selectFavPhoneAtom, selectFavSubAdrAtom } from "stores/favorite";
 import { useDrag, useDrop } from "react-dnd";
 import xIng from "../../assets/x.png";
 const ItemTypes = {
@@ -34,11 +34,19 @@ const FavContent: React.FC<FavContentProps> = ({
 }) => {
   const setLatitude = useSetAtom(latitudeAtom);
   const setLongitude = useSetAtom(longitudeAtom);
+  const selectContent = useSetAtom(selectContentAtom)
+  const selectAdress = useSetAtom(selectAdressAtom)
+  const selectSubAdr = useSetAtom(selectFavSubAdrAtom)
+  const selectPhone = useSetAtom(selectFavPhoneAtom)
 
   const handleItemClick = () => {
     if (item) {
       setLatitude(parseFloat(item.y));
       setLongitude(parseFloat(item.x));
+      selectContent(item.place_name);
+      selectAdress(item.address_name);
+      selectSubAdr(item.road_address_name);
+      selectPhone(item.phone)
     }
   };
 
