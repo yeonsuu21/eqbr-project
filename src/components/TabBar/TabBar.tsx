@@ -22,7 +22,7 @@ function TabBar() {
   return (
     <TabBarWapper>
       <Logo>
-        <LogoImg src={logo} alt="logo" />
+        <LogoImg src={logo} alt="logo" onClick={() => { navigate('/') }} />
       </Logo>
       <TabStr>
         <div className={!flag ? "map-act" : "map"} onClick={routeMain}>
@@ -54,6 +54,7 @@ export const Logo = styled.div`
 export const LogoImg = styled.img`
   width: 9rem;
   height: 3.3rem;
+  cursor: pointer;
 `;
 
 export const TabStr = styled.div`
