@@ -25,6 +25,7 @@ const ExceptionWrapper = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-top: 7.5rem;
 `;
 
 const Image = styled.img`
@@ -58,4 +59,10 @@ const ExceptBtn = styled.button`
   font-weight: 700;
   color: #505050;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  &:hover{
+    background-color: #253bff;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 `;
