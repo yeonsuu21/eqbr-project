@@ -3,19 +3,30 @@ import React, { useEffect, useState } from "react";
 import { searchAllAtom, searchBtnAtom, searchStrAtom } from "stores/map";
 import { searchActBtnAtom } from "stores/search";
 import styled from "styled-components";
+
 function Search() {
+  //유저가 적는 텍스트
   const [search, setSearch] = useState("");
+  //input에 나오는 value
   const [result, setResult] = useState("");
   const [searchStr, setSearchStr] = useAtom(searchStrAtom);
   const [resultLoad, setResultLoad] = useAtom(searchBtnAtom);
   const [actBtn, setActBtn] = useAtom(searchActBtnAtom);
+  //카테고리 || 키워드 결과
   const [searchAll, setSearchAll] = useAtom(searchAllAtom);
-  const keyword = useAtom(searchAllAtom);
+
+  useEffect(() => {
+    if (searchAll) {
+      setSearch(searchAll);
+      setResult(searchAll);
+    }
+  }, [searchAll]);
+
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     setSearch(e.target.value);
     setResult(e.target.value);
   };
-  //키워드 입력 시 버튼 활성화
+
   useEffect(() => {
     if (search.trim() !== "") {
       setActBtn(true);
@@ -29,11 +40,13 @@ function Search() {
       ClickBtn();
     }
   };
+
   const ClickBtn = () => {
     setSearchStr(search);
     setSearchAll(search);
     setResultLoad(true);
   };
+
   return (
     <div>
       <SearchWrapper>
@@ -52,6 +65,7 @@ function Search() {
     </div>
   );
 }
+
 export const SearchWrapper = styled.div`
   border-radius: 10px;
   margin: 1rem;
@@ -60,6 +74,7 @@ export const SearchWrapper = styled.div`
   justify-content: space-between;
   cursor: pointer;
 `;
+
 export const SearchInput = styled.input`
   border: 1px solid #d9d9d9;
   border-radius: 10px;
@@ -69,6 +84,7 @@ export const SearchInput = styled.input`
   font-size: 13px;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
 `;
+
 export const SearchBtn = styled.div`
   height: 2.7rem;
   width: 4rem;
@@ -81,6 +97,7 @@ export const SearchBtn = styled.div`
   border: 1px solid #d9d9d9;
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.2);
 `;
+
 export const SearchBtnAct = styled.div`
   cursor: pointer;
   height: 2.7rem;
@@ -95,4 +112,5 @@ export const SearchBtnAct = styled.div`
   font-size: 14px;
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.4);
 `;
+
 export default Search;

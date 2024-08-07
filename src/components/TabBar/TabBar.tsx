@@ -8,14 +8,14 @@ import { selectTabAtom } from "stores/map";
 function TabBar() {
   const navigate = useNavigate();
   const [flag, setFlag] = useAtom(selectTabAtom);
-
+//flag가 flase면 지도 선택된것
   const routeFav = () => {
     setFlag(true);
     navigate("/fav");
   };
 
   const routeMain = () => {
-    setFlag(true);
+    setFlag(false);
     navigate("/");
   };
 
@@ -25,24 +25,12 @@ function TabBar() {
         <LogoImg src={logo} alt="logo" />
       </Logo>
       <TabStr>
-        {flag ? (
-          <div className="map-act" onClick={routeMain}>
-            지도
-          </div>
-        ) : (
-          <div className="map" onClick={routeMain}>
-            지도
-          </div>
-        )}
-        {flag ? (
-          <div className="fav-act" onClick={routeFav}>
-            즐겨찾기
-          </div>
-        ) : (
-          <div className="fav" onClick={routeFav}>
-            즐겨찾기
-          </div>
-        )}
+        <div className={!flag ? "map-act" : "map"} onClick={routeMain}>
+          지도
+        </div>
+        <div className={flag ? "fav-act" : "fav"} onClick={routeFav}>
+          즐겨찾기
+        </div>
       </TabStr>
     </TabBarWapper>
   );
@@ -74,7 +62,7 @@ export const TabStr = styled.div`
   margin-left: 5rem;
 
   .map {
-    color: #eeeeee;
+    color: #737373;
     font-size: 22px;
     font-weight: 600;
     margin-right: 5rem;
@@ -82,7 +70,7 @@ export const TabStr = styled.div`
     font-family: pretendard;
   }
   .map-act {
-    color: #eeeeee;
+    color: white;
     font-size: 22px;
     font-weight: 600;
     margin-right: 5rem;
@@ -90,7 +78,7 @@ export const TabStr = styled.div`
     font-family: pretendard;
   }
   .fav {
-    color: #eeeeee;
+    color: #737373;
     font-size: 20.5px;
     font-weight: 600;
     cursor: pointer;

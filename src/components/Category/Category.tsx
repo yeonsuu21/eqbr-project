@@ -6,7 +6,7 @@ import {
   searchAllAtom,
   searchStrAtom,
 } from "stores/map";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const initialCategories = ["카페", "음식점", "편의점", "주차장", "은행"];
 
@@ -25,14 +25,23 @@ function Category() {
   const displayCategories = [...searchHistory, ...initialCategories];
 
   const handleCategoryClick = (category: string) => {
-    setSearchAll(category);
-    setSelectedCategory(category);
+    if (selectedCategory === category) {
+      setSelectedCategory('');
+      setSearchAll('');
+    } else {
+      setSelectedCategory(category);
+      setSearchAll(category);
+    }
   };
 
   return (
     <CategWrapper>
       {displayCategories.map((category, index) => (
-        <CategBox key={index} onClick={() => handleCategoryClick(category)}>
+        <CategBox
+          key={index}
+          onClick={() => handleCategoryClick(category)}
+          selected={selectedCategory === category}
+        >
           {category}
         </CategBox>
       ))}
@@ -50,7 +59,7 @@ export const CategWrapper = styled.div`
   align-items: center;
 `;
 
-export const CategBox = styled.div`
+export const CategBox = styled.div<{ selected: boolean }>`
   color: #505050;
   width: 4rem;
   height: 2.2rem;
@@ -64,8 +73,14 @@ export const CategBox = styled.div`
   font-size: 12px;
   font-weight: 600;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  ${(props) =>
+    props.selected &&
+    css`
+      background-color: #0064ff;
+      color: white;
+    `}
   &:hover {
-    cursor: pointer;
     background-color: #0064ff;
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
