@@ -50,11 +50,10 @@ function KakaoKeywordMap() {
   const modalHandler = () => {
     setModalOpen(true);
   };
-
-  const specialMarkerSrc = "https://i.ibb.co/dgfdZVr/Pngtree-3d-pinpoint-location-marker-icon-15108674.png";
-  const markerImageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
+  const specialSrc = 'https://i.ibb.co/dgfdZVr/Pngtree-3d-pinpoint-location-marker-icon-15108674.png'
+  const markerImageSrc =
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
   const imageSize = { width: 36, height: 37 };
-  const specialImageSize = { width: 70, height: 70 };
   const spriteSize = { width: 36, height: 691 };
 
   useEffect(() => {
@@ -158,11 +157,11 @@ function KakaoKeywordMap() {
         onCreate={setMap}
       >
         {(!keyword || places.length === 0) && (
-          <MapMarker
+          <MapMarker 
             position={defaultCenter}
             image={{
-              src: specialMarkerSrc,
-              size: specialImageSize,
+              src: specialSrc,
+              size: { width: 64, height: 69 }, // Adjust the size as needed
             }}
           />
         )}

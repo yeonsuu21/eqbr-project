@@ -62,7 +62,7 @@ export const TabStr = styled.div`
   margin-left: 5rem;
 
   .map {
-    color: #737373;
+    color: #979797;
     font-size: 22px;
     font-weight: 600;
     margin-right: 5rem;
@@ -78,7 +78,7 @@ export const TabStr = styled.div`
     font-family: pretendard;
   }
   .fav {
-    color: #737373;
+    color: #979797;
     font-size: 20.5px;
     font-weight: 600;
     cursor: pointer;

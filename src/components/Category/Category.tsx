@@ -28,6 +28,7 @@ function Category() {
     if (selectedCategory === category) {
       setSelectedCategory('');
       setSearchAll('');
+      window.location.reload();
     } else {
       setSelectedCategory(category);
       setSearchAll(category);
