@@ -39,7 +39,6 @@ function FavList() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
         <FavListWrapper>
           {parsedItem.length === 0 ? (
             <EmptyMessage>
@@ -61,27 +60,27 @@ function FavList() {
             </>
           )}
         </FavListWrapper>
-      </div>
     </DndProvider>
   );
 }
 
 export const FavListWrapper = styled.div`
+padding: 1rem 0;
   width: 35rem;
   height: 35rem;
-  border: 1px solid #efefef;
+  border: 1px solid #efefef; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   margin-top: 3rem;
   border-radius: 40px;
-  overflow-y: auto;
   display: flex;
+  overflow-y: scroll;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
 export const ShowMoreButton = styled.button`
   width: 70%;
+  padding: 1rem 0;
   border: none;
   background-color: #007bff;
   color: white;
