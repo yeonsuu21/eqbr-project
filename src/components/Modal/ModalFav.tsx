@@ -19,6 +19,7 @@ export const ModalFavWrapper = styled.div`
 `;
 
 export const FavTitle = styled.div`
+margin-top: 1.7rem;
     font-size: 28px;
     font-weight: 700;
     color: #333333;
