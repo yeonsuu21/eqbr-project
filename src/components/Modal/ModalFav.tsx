@@ -60,6 +60,12 @@ export const FavCancelBtn = styled.button`
     border-radius: 10px;
     border: none;
     cursor: pointer;
+    font-weight: 700;
+    &:hover{
+      font-weight: 700;
+      background-color: #979797;
+      color: white;
+    }
 `;
 
 export const FavActBtn = styled.button`
@@ -68,6 +74,12 @@ export const FavActBtn = styled.button`
     border-radius: 10px;
     border: none;
     cursor: pointer;
+    font-weight: 700;
+    &:hover{
+      font-weight: 700;
+      background-color: #253bff;
+      color: white;
+    }
 `;
 
 function ModalFav() {
