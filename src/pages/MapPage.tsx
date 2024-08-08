@@ -16,7 +16,6 @@ import marker from '../assets/marker.png'
 import warn from '../assets/warn.png'
 import ExceptionComponent from "components/Exception/SearchException";
 import TabBar from "components/TabBar/TabBar";
-import { type } from "os";
 
 export type Place = {
   address_name: string;
