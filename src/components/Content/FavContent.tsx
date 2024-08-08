@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useSetAtom } from "jotai";
 import {
   latitudeAtom,
@@ -12,28 +12,30 @@ import {
 import { useDrag, useDrop } from "react-dnd";
 import xIng from "../../assets/x.png";
 import { type } from "os";
+
 const ItemTypes = {
   FAV_CONTENT: "favContent",
 };
 
-type FavContentProps ={
-  item: {
-    address_name: string;
-    category_group_code: string;
-    category_group_name: string;
-    category_name: string;
-    distance: string;
-    id: string;
-    phone: string;
-    place_name: string;
-    place_url: string;
-    road_address_name: string;
-    x: string;
-    y: string;
-  };
+type FavoriteItem = {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
+type FavContentProps = {
+  item: FavoriteItem;
   index: number;
   moveFavContent: (dragIndex: number, hoverIndex: number) => void;
-
 }
 
 const FavContent: React.FC<FavContentProps> = ({
@@ -47,7 +49,7 @@ const FavContent: React.FC<FavContentProps> = ({
   const selectAdress = useSetAtom(selectAdressAtom);
   const selectSubAdr = useSetAtom(selectFavSubAdrAtom);
   const selectPhone = useSetAtom(selectFavPhoneAtom);
-  
+
   const handleItemClick = () => {
     setLatitude(parseFloat(item.y));
     setLongitude(parseFloat(item.x));
@@ -59,9 +61,9 @@ const FavContent: React.FC<FavContentProps> = ({
 
   const deleteFav = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const existingItems = JSON.parse(localStorage.getItem("select") || "[]");
+    const existingItems: FavoriteItem[] = JSON.parse(localStorage.getItem("select") || "[]");
     const updatedItems = existingItems.filter(
-      (favItem: any) => favItem.id !== item.id
+      (favItem) => favItem.id !== item.id
     );
     localStorage.setItem("select", JSON.stringify(updatedItems));
     alert("즐겨찾기에서 삭제되었습니다");
@@ -101,7 +103,7 @@ const FavContent: React.FC<FavContentProps> = ({
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <FCTitle>{item.place_name}</FCTitle>
           <FCTImage onClick={deleteFav}>
-            <img src={xIng} style={{ width: "1.3rem" }} alt="delete icon"/>
+            <img src={xIng} style={{ width: "1.3rem" }} alt="delete icon" />
           </FCTImage>
         </div>
         <FCAdress>{item.road_address_name}</FCAdress>
@@ -179,14 +181,14 @@ export const Arrange = styled.div`
 
 export const FCTitle = styled.div`
   font-size: 20px;
-  font-family: pretandard;
+  font-family: pretendard;
   font-weight: 800;
   margin-bottom: 0.3rem;
 `;
 
 export const FCAdress = styled.div`
   font-size: 15px;
-  font-family: pretandard;
+  font-family: pretendard;
   font-weight: 700;
   color: #505050;
   margin-bottom: 0.16rem;
@@ -194,7 +196,7 @@ export const FCAdress = styled.div`
 
 export const FCSubAdress = styled.div`
   font-size: 13px;
-  font-family: pretandard;
+  font-family: pretendard;
   font-weight: 700;
   color: #737373;
   margin-bottom: 1rem;
@@ -202,7 +204,7 @@ export const FCSubAdress = styled.div`
 
 export const FCnumber = styled.div`
   font-size: 17px;
-  font-family: pretandard;
+  font-family: pretendard;
   font-weight: 700;
   color: #0064ff;
 `;

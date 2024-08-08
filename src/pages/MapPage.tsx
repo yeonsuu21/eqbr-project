@@ -1,4 +1,3 @@
-import TabBar from ".././components/TabBar/TabBar";
 import React, { useState, useEffect } from "react";
 import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import "./Map.css";
@@ -16,11 +15,27 @@ import styled from "styled-components";
 import marker from '../assets/marker.png'
 import warn from '../assets/warn.png'
 import ExceptionComponent from "components/Exception/SearchException";
+import TabBar from "components/TabBar/TabBar";
 import { type } from "os";
+
+export type Place = {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
 function MapPage() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
-  const [places, setPlaces] = useState<any[]>([]);
+  const [places, setPlaces] = useState<Place[]>([]);
   const [message, setMessage] = useState(false);
   const [modalOpen, setModalOpen] = useAtom(setmodalAtom);
   const setFavPlace = useSetAtom(favPlaceAtom);
@@ -36,6 +51,7 @@ function MapPage() {
     lat: 37.51087446314432,
     lng: 127.04499074830632,
   };
+
   useEffect(() => {
     if (!map) return;
     if (keyword == null) {
@@ -48,7 +64,20 @@ function MapPage() {
       keyword,
       (data, status, pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-          setPlaces(data);
+          setPlaces(data.map((item: any) => ({
+            id: item.id,
+            place_name: item.place_name,
+            address_name: item.address_name,
+            road_address_name: item.road_address_name,
+            x: item.x,
+            y: item.y,
+            phone: item.phone || null,
+            category_group_code: item.category_group_code || '',
+            category_group_name: item.category_group_name,
+            category_name: item.category_name,
+            distance: item.distance,
+            place_url: item.place_url,
+          })));
           const bounds = new kakao.maps.LatLngBounds();
           let markers = [];
           for (var i = 0; i < data.length; i++) {
@@ -86,6 +115,7 @@ function MapPage() {
     );
     setFlag(false);
   }, [map, keyword, message]);
+
   const EventMarkerContainer = ({
     position,
     content,
@@ -96,30 +126,6 @@ function MapPage() {
   }: any) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
-//검색 예외처리
-    type ExceptionComponentProps = {
-      imageSrc: string;
-      altText: string;
-      message: string;
-      messageTitle: string;
-      imageWidth?: string;
-    }
-    
-    const ExceptionComponent: React.FC<ExceptionComponentProps> = ({
-      imageSrc,
-      altText,
-      message,
-      messageTitle,
-      imageWidth = "170px",
-    }) => {
-      return (
-        <ExceptionWrapper>
-          <Image src={imageSrc} alt={altText} style={{ width: imageWidth }} />
-          <Message>{message}</Message>
-          <MessageTitle>{messageTitle}</MessageTitle>
-        </ExceptionWrapper>
-      );
-    };
 
     return (
       <MapMarker
@@ -151,6 +157,7 @@ function MapPage() {
       </MapMarker>
     );
   };
+
   return (
     <>
       <TabBar />
@@ -189,19 +196,22 @@ function MapPage() {
         <div id="menu_wrap" className="bg_white">
           <SideBar />
           <hr />
-          {!keyword && <ExceptionComponent
-  imageSrc={marker}
-  altText="마커"
-  message="아직 검색이 존재하지 않아요"
-  messageTitle="이름이나 주소로 검색해 보세요!"
-/>}
-          {keyword && flag && <ExceptionComponent
-      imageSrc={warn}
-      altText="경고"
-      message="검색 결과가 존재하지 않아요"
-      messageTitle="다른 키워드로 검색해 보세요!"
-    />
-}
+          {!keyword && (
+            <ExceptionComponent
+              imageSrc={marker}
+              altText="마커"
+              message="아직 검색이 존재하지 않아요"
+              messageTitle="이름이나 주소로 검색해 보세요!"
+            />
+          )}
+          {keyword && flag && (
+            <ExceptionComponent
+              imageSrc={warn}
+              altText="경고"
+              message="검색 결과가 존재하지 않아요"
+              messageTitle="다른 키워드로 검색해 보세요!"
+            />
+          )}
           {keyword && !flag && (
             <PlacesList
               places={places}
@@ -218,6 +228,7 @@ function MapPage() {
     </>
   );
 }
+
 const ExceptionWrapper = styled.div`
   margin-top: 3rem;
   display: flex;
@@ -248,4 +259,5 @@ const MessageTitle = styled.div`
   font-weight: 800;
   color: #505050;
 `;
+
 export default MapPage;

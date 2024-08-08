@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
-import { Place, selectIdAtom } from "stores/map";
+import { selectIdAtom } from "stores/map";
 import { type } from "os";
+import { Place } from "pages/MapPage";
 
 type PlacesListProps= {
   places: Place[];

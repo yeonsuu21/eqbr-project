@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { Place } from "pages/MapPage";
 //키워드 검색
 export const searchBtnAtom = atom<boolean>(false);
 //키워드 검색 string
@@ -21,17 +22,3 @@ export const selectPhoneAtom = atom<string>("");
 export const selectSubAdrAtom = atom<string>("");
 
 export const selectTabAtom = atom<string>('');
-export type Place = {
-  address_name: string;
-  category_group_code: string;
-  category_group_name: string;
-  category_name: string;
-  distance: string;
-  id: string;
-  phone: string;
-  place_name: string;
-  place_url: string;
-  road_address_name: string;
-  x: string;
-  y: string;
-}
