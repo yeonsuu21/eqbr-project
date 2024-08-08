@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import { useSetAtom } from "jotai";
 import {
@@ -32,6 +32,7 @@ interface FavContentProps {
   };
   index: number;
   moveFavContent: (dragIndex: number, hoverIndex: number) => void;
+
 }
 
 const FavContent: React.FC<FavContentProps> = ({
@@ -45,18 +46,14 @@ const FavContent: React.FC<FavContentProps> = ({
   const selectAdress = useSetAtom(selectAdressAtom);
   const selectSubAdr = useSetAtom(selectFavSubAdrAtom);
   const selectPhone = useSetAtom(selectFavPhoneAtom);
-  const [flag, setFlag] = useState(false);
-  const arrange = index + 1;
+  
   const handleItemClick = () => {
-    if (item) {
-      setLatitude(parseFloat(item.y));
-      setLongitude(parseFloat(item.x));
-      selectContent(item.place_name);
-      selectAdress(item.address_name);
-      selectSubAdr(item.road_address_name);
-      selectPhone(item.phone);
-      setFlag(true);
-    }
+    setLatitude(parseFloat(item.y));
+    setLongitude(parseFloat(item.x));
+    selectContent(item.place_name);
+    selectAdress(item.address_name);
+    selectSubAdr(item.road_address_name);
+    selectPhone(item.phone);
   };
 
   const deleteFav = (e: React.MouseEvent) => {
@@ -94,17 +91,16 @@ const FavContent: React.FC<FavContentProps> = ({
 
   return (
     <FavContentWrapper
-      selected={flag}
       ref={ref}
       onClick={handleItemClick}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
-      <Arrange>{arrange}</Arrange>
+      <Arrange>{index + 1}</Arrange>
       <div style={{ width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <FCTitle>{item.place_name}</FCTitle>
           <FCTImage onClick={deleteFav}>
-            <img src={xIng} style={{ width: "1.3rem" }}></img>
+            <img src={xIng} style={{ width: "1.3rem" }} alt="delete icon"/>
           </FCTImage>
         </div>
         <FCAdress>{item.road_address_name}</FCAdress>
@@ -156,7 +152,7 @@ const FavContent: React.FC<FavContentProps> = ({
   );
 };
 
-export const FavContentWrapper = styled.div<{ selected: boolean }>`
+export const FavContentWrapper = styled.div`
   width: 83%;
   height: 7rem;
   border-radius: 30px;
@@ -167,21 +163,19 @@ export const FavContentWrapper = styled.div<{ selected: boolean }>`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
   cursor: pointer;
   display: flex;
-  ${(props) =>
-    props.selected &&
-    css`
-      background-color: #0064ff;
-    `}
 `;
+
 export const FCTImage = styled.div`
   cursor: pointer;
 `;
+
 export const Arrange = styled.div`
   font-size: 30px;
   font-weight: 800;
   margin-right: 2rem;
   color: #979797;
 `;
+
 export const FCTitle = styled.div`
   font-size: 20px;
   font-family: pretandard;

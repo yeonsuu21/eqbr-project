@@ -19,29 +19,28 @@ import {
   selectFavPhoneAtom,
   selectFavSubAdrAtom,
 } from "stores/favorite";
+
 function FavPage() {
   const [parsedItem, setParsedItem] = useAtom(favListArrayAtom);
   const [visibleCount, setVisibleCount] = useState(5);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
   const content = useAtomValue(selectContentAtom);
   const adress = useAtomValue(selectAdressAtom);
   const subAdr = useAtomValue(selectFavSubAdrAtom);
   const phone = useAtomValue(selectFavPhoneAtom);
-  const [position, setPosition] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+
   const handleShowMore = () => {
     setVisibleCount((prevCount) => Math.min(prevCount + 5, parsedItem.length));
   };
+
   const moveFavContent = (fromIndex: number, toIndex: number) => {
     const updatedItems = [...parsedItem];
     const [movedItem] = updatedItems.splice(fromIndex, 1);
     updatedItems.splice(toIndex, 0, movedItem);
-    //죄표도 이동하게?
-    console.log(updatedItems);
     setParsedItem(updatedItems);
     localStorage.setItem("select", JSON.stringify(updatedItems));
   };
@@ -60,12 +59,14 @@ function FavPage() {
         console.error("오류", error);
       }
     }
-  }, []);
+  }, [setParsedItem]);
+
   useEffect(() => {
     if (latitude !== null && longitude !== null) {
       setPosition({ lat: latitude, lng: longitude });
     }
   }, [latitude, longitude]);
+
   return (
     <>
       <TabBar />
@@ -139,6 +140,7 @@ function FavPage() {
     </>
   );
 }
+
 export const FavPageWrapper = styled.div`
   width: 80%;
   height: 800px;
@@ -147,6 +149,7 @@ export const FavPageWrapper = styled.div`
   justify-content: center;
   margin-left: 10rem;
 `;
+
 export const FavListWrapper = styled.div`
   padding: 1rem 0;
   width: 45rem;
@@ -180,6 +183,7 @@ export const EmptyMessage = styled.div`
   font-size: 1.5rem;
   color: #333;
 `;
+
 export const FavMapWrapper = styled.div`
   width: 50rem;
   height: 46rem;
