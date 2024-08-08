@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import { Place, selectIdAtom } from "stores/map";
+import { type } from "os";
 
-interface PlacesListProps {
+type PlacesListProps= {
   places: Place[];
   map: any;
   markers: any[];
@@ -13,8 +14,6 @@ interface PlacesListProps {
 
 const PlacesList: React.FC<PlacesListProps> = ({
   places,
-  map,
-  markers,
   setSelectedPlace,
   setFavPlace,
   modalHandler,

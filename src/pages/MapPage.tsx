@@ -16,6 +16,7 @@ import styled from "styled-components";
 import marker from '../assets/marker.png'
 import warn from '../assets/warn.png'
 import ExceptionComponent from "components/Exception/SearchException";
+import { type } from "os";
 function MapPage() {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any[]>([]);
@@ -96,7 +97,7 @@ function MapPage() {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 //검색 예외처리
-    interface ExceptionComponentProps {
+    type ExceptionComponentProps = {
       imageSrc: string;
       altText: string;
       message: string;

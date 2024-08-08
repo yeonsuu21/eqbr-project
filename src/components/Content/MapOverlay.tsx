@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-interface OverlayProps {
+type OverlayProps= {
   content: string;
   address: string;
   phone: string | number;

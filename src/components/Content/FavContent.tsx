@@ -11,11 +11,12 @@ import {
 } from "stores/favorite";
 import { useDrag, useDrop } from "react-dnd";
 import xIng from "../../assets/x.png";
+import { type } from "os";
 const ItemTypes = {
   FAV_CONTENT: "favContent",
 };
 
-interface FavContentProps {
+type FavContentProps ={
   item: {
     address_name: string;
     category_group_code: string;

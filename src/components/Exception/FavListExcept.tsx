@@ -1,35 +1,54 @@
+import { type } from "os";
 import React from "react";
 import styled from "styled-components";
-import fav from "../../assets/fav.png";
-import { useNavigate } from "react-router-dom";
-function FavListExcept() {
-  const navigate = useNavigate();
-  const navigateClick = () => {
-    navigate("/");
-  };
-  return (
-    <ExceptionWrapper>
-      <Image src={fav} alt="마커" />
-      <Message>아직 즐겨찾기가 존재하지 않아요</Message>
-      <MessageSub>홈 - 키워드 검색 - 즐겨찾기 등록</MessageSub>
-      <MessageTitle>즐겨찾기를 추가해 보세요!</MessageTitle>
-      <ExceptBtn onClick={navigateClick}>추가하러 가기</ExceptBtn>
-    </ExceptionWrapper>
-  );
+
+type ExceptionComponentProps = {
+  imageSrc: string;
+  altText: string;
+  message: string;
+  messageSub?: string;
+  messageTitle: string;
+  buttonText?: string;
+  onButtonClick?: () => void;
+  imageWidth?: string;
+  marginTop?: string;
 }
 
-export default FavListExcept;
+const ExceptionComponent: React.FC<ExceptionComponentProps> = ({
+  imageSrc,
+  altText,
+  message,
+  messageSub,
+  messageTitle,
+  buttonText,
+  onButtonClick,
+  imageWidth = "100px",
+  marginTop = "12rem",
+}) => {
+  return (
+    <ExceptionWrapper style={{ marginTop }}>
+      <Image src={imageSrc} alt={altText} style={{ width: imageWidth }} />
+      <Message>{message}</Message>
+      {messageSub && <MessageSub>{messageSub}</MessageSub>}
+      <MessageTitle>{messageTitle}</MessageTitle>
+      {buttonText && onButtonClick && (
+        <ExceptBtn onClick={onButtonClick}>{buttonText}</ExceptBtn>
+      )}
+    </ExceptionWrapper>
+  );
+};
+
+export default ExceptionComponent;
+
 const ExceptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 12rem;
 `;
 
 const Image = styled.img`
-  width: 100px;
   height: auto;
   margin-bottom: 30px;
 `;
@@ -40,20 +59,23 @@ const Message = styled.div`
   margin-bottom: 0.3rem;
   font-weight: 800;
 `;
+
 const MessageSub = styled.div`
   font-size: 13px;
   color: #939393;
   margin-bottom: 1rem;
 `;
+
 const MessageTitle = styled.div`
   font-size: 25px;
   font-weight: 800;
   color: #333;
   margin-bottom: 3.5rem;
 `;
+
 const ExceptBtn = styled.button`
   border: none;
-  font-family: pretandard;
+  font-family: pretendard;
   padding: 0.7rem 5rem;
   border-radius: 20px;
   font-weight: 700;

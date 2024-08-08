@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { type } from "os";
 //즐겨찾기에서 선택한 위도, 경도
 export const latitudeAtom = atom<number | null>(null);
 export const longitudeAtom = atom<number | null>(null);
@@ -8,7 +9,7 @@ export const selectFavSubAdrAtom = atom<string>('');
 export const selectFavPhoneAtom = atom<number|string>('');
 
 //즐겨찾기 배열 목록
-interface FavItem {
+type FavItem = {
     address_name: string;
     category_group_code: string;
     category_group_name: string;

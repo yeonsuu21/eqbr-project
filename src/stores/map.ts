@@ -21,7 +21,7 @@ export const selectPhoneAtom = atom<string>("");
 export const selectSubAdrAtom = atom<string>("");
 
 export const selectTabAtom = atom<string>('');
-export interface Place {
+export type Place = {
   address_name: string;
   category_group_code: string;
   category_group_name: string;

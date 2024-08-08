@@ -9,7 +9,6 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useAtomValue } from "jotai";
-import FavMapExcept from "components/Exception/FavMapExcept";
 import MapOverlay from "components/Content/MapOverlay";
 import {
   latitudeAtom,
@@ -19,11 +18,13 @@ import {
   selectFavPhoneAtom,
   selectFavSubAdrAtom,
 } from "stores/favorite";
-
+import ExceptionComponent from "components/Exception/FavListExcept";
+import { useNavigate, useNavigationType } from "react-router-dom";
+import favImg from '../assets/fav.png'
+import map from '../assets/map.png'
 function FavPage() {
   const [parsedItem, setParsedItem] = useAtom(favListArrayAtom);
   const [visibleCount, setVisibleCount] = useState(5);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const latitude = useAtomValue(latitudeAtom);
   const longitude = useAtomValue(longitudeAtom);
   const content = useAtomValue(selectContentAtom);
@@ -32,7 +33,7 @@ function FavPage() {
   const phone = useAtomValue(selectFavPhoneAtom);
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-
+  const navigate = useNavigate();
   const handleShowMore = () => {
     setVisibleCount((prevCount) => Math.min(prevCount + 5, parsedItem.length));
   };
@@ -67,6 +68,9 @@ function FavPage() {
     }
   }, [latitude, longitude]);
 
+  const navigateClick = () => {
+    navigate("/");
+  };
   return (
     <>
       <TabBar />
@@ -75,7 +79,15 @@ function FavPage() {
           <FavListWrapper>
             {parsedItem.length === 0 ? (
               <EmptyMessage>
-                <FavListExcept />
+                <ExceptionComponent
+      imageSrc={favImg}
+      altText="즐겨찾기"
+      message="아직 즐겨찾기가 존재하지 않아요"
+      messageSub="홈 - 키워드 검색 - 즐겨찾기 등록"
+      messageTitle="즐겨찾기를 추가해 보세요!"
+      buttonText="추가하러 가기"
+      onButtonClick={navigateClick}
+    />
               </EmptyMessage>
             ) : (
               <>
@@ -132,7 +144,14 @@ function FavPage() {
             </Map>
           ) : (
             <NoSelectionMessage>
-              <FavMapExcept />
+              <ExceptionComponent
+      imageSrc={map}
+      altText="지도"
+      message="아직 장소가 선택되지 않았어요"
+      messageSub="옆에 즐겨찾기에서 장소를 선택할 수 있어요"
+      messageTitle="장소를 선택해 보세요!"
+      marginTop="6rem"
+    />
             </NoSelectionMessage>
           )}
         </FavMapWrapper>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 // Define the props for the ExceptionComponent
-interface ExceptionComponentProps {
+type ExceptionComponentProps ={
   imageSrc: string;
   altText: string;
   message: string;
