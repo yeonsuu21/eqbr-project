@@ -79,11 +79,11 @@
 }
 
 #placesList .item:hover {
-  background-color: #EFF1FF;
+  background-color: #eff1ff;
 }
 
 #placesList .item.selected {
-  background-color: #EFF1FF;
+  background-color: #eff1ff;
 }
 
 #placesList .item span {

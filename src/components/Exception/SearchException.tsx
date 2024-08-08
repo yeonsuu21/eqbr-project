@@ -1,15 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import warn from "../../assets/warn.png";
-function SearchException() {
+
+// Define the props for the ExceptionComponent
+interface ExceptionComponentProps {
+  imageSrc: string;
+  altText: string;
+  message: string;
+  messageTitle: string;
+}
+
+const ExceptionComponent: React.FC<ExceptionComponentProps> = ({
+  imageSrc,
+  altText,
+  message,
+  messageTitle,
+}) => {
   return (
     <ExceptionWrapper>
-      <Image src={warn} alt="마커" />
-      <Message>검색 결과가 존재하지 않아요</Message>
-      <MessageTitle>다른 키워드로 검색해 보세요!</MessageTitle>
+      <Image src={imageSrc} alt={altText} />
+      <Message>{message}</Message>
+      <MessageTitle>{messageTitle}</MessageTitle>
     </ExceptionWrapper>
   );
-}
+};
+
+export default ExceptionComponent;
+
 const ExceptionWrapper = styled.div`
   margin-top: 3rem;
   display: flex;
@@ -20,20 +36,23 @@ const ExceptionWrapper = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100px; /* Adjust the size as needed */
+  width: 170px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 `;
 
 const Message = styled.div`
+  font-family: pretendard;
+  font-weight: 600;
   font-size: 16px;
   color: #939393;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.4rem;
   font-weight: 800;
 `;
+
 const MessageTitle = styled.div`
-  font-size: 25px;
+  font-family: pretendard;
+  font-size: 23px;
   font-weight: 800;
-  color: #333;
+  color: #505050;
 `;
-export default SearchException;

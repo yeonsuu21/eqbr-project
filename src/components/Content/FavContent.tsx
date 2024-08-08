@@ -1,7 +1,14 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
 import { useSetAtom } from "jotai";
-import { latitudeAtom, longitudeAtom, selectAdressAtom, selectContentAtom, selectFavPhoneAtom, selectFavSubAdrAtom } from "stores/favorite";
+import {
+  latitudeAtom,
+  longitudeAtom,
+  selectAdressAtom,
+  selectContentAtom,
+  selectFavPhoneAtom,
+  selectFavSubAdrAtom,
+} from "stores/favorite";
 import { useDrag, useDrop } from "react-dnd";
 import xIng from "../../assets/x.png";
 const ItemTypes = {
@@ -34,11 +41,12 @@ const FavContent: React.FC<FavContentProps> = ({
 }) => {
   const setLatitude = useSetAtom(latitudeAtom);
   const setLongitude = useSetAtom(longitudeAtom);
-  const selectContent = useSetAtom(selectContentAtom)
-  const selectAdress = useSetAtom(selectAdressAtom)
-  const selectSubAdr = useSetAtom(selectFavSubAdrAtom)
-  const selectPhone = useSetAtom(selectFavPhoneAtom)
-  const arrange = index+1
+  const selectContent = useSetAtom(selectContentAtom);
+  const selectAdress = useSetAtom(selectAdressAtom);
+  const selectSubAdr = useSetAtom(selectFavSubAdrAtom);
+  const selectPhone = useSetAtom(selectFavPhoneAtom);
+  const [flag, setFlag] = useState(false);
+  const arrange = index + 1;
   const handleItemClick = () => {
     if (item) {
       setLatitude(parseFloat(item.y));
@@ -46,12 +54,13 @@ const FavContent: React.FC<FavContentProps> = ({
       selectContent(item.place_name);
       selectAdress(item.address_name);
       selectSubAdr(item.road_address_name);
-      selectPhone(item.phone)
+      selectPhone(item.phone);
+      setFlag(true);
     }
   };
 
   const deleteFav = (e: React.MouseEvent) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     const existingItems = JSON.parse(localStorage.getItem("select") || "[]");
     const updatedItems = existingItems.filter(
       (favItem: any) => favItem.id !== item.id
@@ -85,64 +94,69 @@ const FavContent: React.FC<FavContentProps> = ({
 
   return (
     <FavContentWrapper
+      selected={flag}
       ref={ref}
       onClick={handleItemClick}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <Arrange>{arrange}</Arrange>
-      <div style={{width:'100%'}}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <FCTitle>{item.place_name}</FCTitle>
-        <FCTImage onClick={deleteFav}>
-          <img src={xIng} style={{ width: "1.3rem" }}></img>
-        </FCTImage>
-      </div>
-      <FCAdress>{item.road_address_name}</FCAdress>
-      <FCSubAdress>(지번) {item.address_name}</FCSubAdress>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <FCnumber>{item.phone ? item.phone : "번호 없음"}</FCnumber>
-        <div>
-          <a
-            style={{
-              fontSize: "11px",
-              padding: "0.5rem 0.8rem",
-              borderRadius: "10px",
-              fontWeight: "600",
-              backgroundColor: "#EFEFEF",
-              color: "#5A5A5A",
-              textDecorationLine: "none",
-            }}
-            href={`https://map.kakao.com/?sName=서울 강남구 봉은사로 411&eName=${encodeURIComponent(
-              item.place_name
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            길찾기
-          </a>
-          <a
-            href={`https://place.map.kakao.com/${encodeURIComponent(item.id)}`}
-            style={{
-              fontSize: "11px",
-              padding: "0.5rem 0.8rem",
-              borderRadius: "10px",
-              fontWeight: "600",
-              backgroundColor: "#EFEFEF",
-              color: "#5A5A5A",
-              marginLeft: "1rem",
-              textDecorationLine: "none",
-            }}
-          >
-            상세보기
-          </a>
+      <div style={{ width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <FCTitle>{item.place_name}</FCTitle>
+          <FCTImage onClick={deleteFav}>
+            <img src={xIng} style={{ width: "1.3rem" }}></img>
+          </FCTImage>
         </div>
-      </div>
+        <FCAdress>{item.road_address_name}</FCAdress>
+        <FCSubAdress>(지번) {item.address_name}</FCSubAdress>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <FCnumber>{item.phone ? item.phone : "번호 없음"}</FCnumber>
+          <div>
+            <a
+              style={{
+                fontSize: "11px",
+                padding: "0.5rem 0.8rem",
+                borderRadius: "10px",
+                fontWeight: "600",
+                backgroundColor: "#EFEFEF",
+                color: "#5A5A5A",
+                textDecorationLine: "none",
+              }}
+              href={`https://map.kakao.com/?sName=서울 강남구 봉은사로 411&eName=${encodeURIComponent(
+                item.place_name
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              길찾기
+            </a>
+            <a
+              href={`https://place.map.kakao.com/${encodeURIComponent(
+                item.id
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: "11px",
+                padding: "0.5rem 0.8rem",
+                borderRadius: "10px",
+                fontWeight: "600",
+                backgroundColor: "#EFEFEF",
+                color: "#5A5A5A",
+                marginLeft: "1rem",
+                textDecorationLine: "none",
+              }}
+            >
+              상세보기
+            </a>
+          </div>
+        </div>
       </div>
     </FavContentWrapper>
   );
 };
 
-export const FavContentWrapper = styled.div`
+export const FavContentWrapper = styled.div<{ selected: boolean }>`
   width: 83%;
   height: 7rem;
   border-radius: 30px;
@@ -151,8 +165,13 @@ export const FavContentWrapper = styled.div`
   margin-bottom: 0.5rem;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
-  cursor: move;
+  cursor: pointer;
   display: flex;
+  ${(props) =>
+    props.selected &&
+    css`
+      background-color: #0064ff;
+    `}
 `;
 export const FCTImage = styled.div`
   cursor: pointer;
@@ -161,8 +180,8 @@ export const Arrange = styled.div`
   font-size: 30px;
   font-weight: 800;
   margin-right: 2rem;
-  color:#979797;
-`
+  color: #979797;
+`;
 export const FCTitle = styled.div`
   font-size: 20px;
   font-family: pretandard;

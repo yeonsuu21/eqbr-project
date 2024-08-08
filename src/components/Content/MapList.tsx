@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Place } from "components/Map/MapTest";
-import { useAtom } from "jotai";
-import { selectIdAtom } from "stores/map";
+import { useAtom, useSetAtom } from "jotai";
+import { Place, selectIdAtom } from "stores/map";
 
 interface PlacesListProps {
   places: Place[];
@@ -20,7 +19,7 @@ const PlacesList: React.FC<PlacesListProps> = ({
   setFavPlace,
   modalHandler,
 }) => {
-  const [selectID, setSelectID] = useAtom(selectIdAtom);
+  const setSelectID = useSetAtom(selectIdAtom);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const handleClick = (index: number, item: Place) => {
@@ -85,6 +84,8 @@ const PlacesList: React.FC<PlacesListProps> = ({
                   즐겨찾기
                 </button>
                 <a
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     fontSize: "10px",
                     padding: "0.4rem",

@@ -1,40 +1,54 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/logo.png";
-import { useAtom } from "jotai";
-import { selectTabAtom } from "stores/map";
+type Tab = "MAP" | "FAV";
 
 function TabBar() {
   const navigate = useNavigate();
-  const [flag, setFlag] = useAtom(selectTabAtom);
-//flag가 flase면 지도 선택된것
-  const routeFav = () => {
-    setFlag(true);
-    navigate("/fav");
+  const [selectedTab, setSelectedTab] = useState<Tab>();
+  const location = useLocation().pathname;
+
+  const navigateToTab = (tab: Tab): void => {
+    setSelectedTab(tab);
+    if (tab === "MAP") {
+      navigate("/");
+    } else if (tab === "FAV") {
+      navigate("/fav");
+    }
   };
 
-  const routeMain = () => {
-    setFlag(false);
-    navigate("/");
-  };
+  useEffect(() => {
+    if (location === "/") {
+      setSelectedTab("MAP");
+    } else if (location === "/fav") {
+      setSelectedTab("FAV");
+    }
+  }, [location, setSelectedTab]);
 
   return (
     <TabBarWapper>
       <Logo>
-        <LogoImg src={logo} alt="logo" onClick={() => { navigate('/') }} />
+        <LogoImg src={logo} alt="logo" onClick={() => navigateToTab("MAP")} />
       </Logo>
       <TabStr>
-        <div className={!flag ? "map-act" : "map"} onClick={routeMain}>
+        <div
+          className={selectedTab === "MAP" ? "map-act" : "map"}
+          onClick={() => navigateToTab("MAP")}
+        >
           지도
         </div>
-        <div className={flag ? "fav-act" : "fav"} onClick={routeFav}>
+        <div
+          className={selectedTab === "FAV" ? "fav-act" : "fav"}
+          onClick={() => navigateToTab("FAV")}
+        >
           즐겨찾기
         </div>
       </TabStr>
     </TabBarWapper>
   );
 }
+
 
 export const TabBarWapper = styled.div`
   height: 3.8rem;

@@ -16,8 +16,8 @@ const MapOverlay: React.FC<OverlayProps> = ({
   return (
     <OverlayWrapper>
       <OVContent>{content}</OVContent>
-      <OVAdress>{address}</OVAdress>
-      <OVRoad>{road}</OVRoad>
+      <OVAdress>{road}</OVAdress>
+      <OVRoad>{address}</OVRoad>
       <OVPhone>{phone ? phone : "번호없음"}</OVPhone>
     </OverlayWrapper>
   );
